@@ -20,12 +20,11 @@ def what_is_this(dest: Path):
     if str(dest) == 'lastOpenedNote':
         print('Open the lastOpenedNote')
         with open('utils/lastOpenedNote', 'r') as readLastNote:
-            lastOpenedNote = readLastNote.read()
+            temp = readLastNote.read().rstrip('\n')
             readLastNote.close()
-            print('This is last opened note', lastOpenedNote)
-            return lastOpenedNote
+            return temp
     else:
-        print('Do not open the lastOpenedNote')
+        return dest
     # destChar = str(dest)[:1]
     # print(destChar)
     # if (destChar == '@'):
@@ -64,9 +63,9 @@ def main():
     args = cli()
     notes_directory = (os.environ['HOME'] + '/.zettelpy')
 
-    slip_box(notes_directory)
-    print(what_is_this(args.destination))
-    # zettel_edit(args.destination, args.view)
+    slip_box(notes_directory) # Checks environment
+
+    zettel_edit(what_is_this(args.destination), args.view)
 
 if __name__ == '__main__':
     main()
