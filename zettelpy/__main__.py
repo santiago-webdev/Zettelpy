@@ -37,7 +37,7 @@ def what_is_this(dest: Path):
 def zettel_edit(dest: Path, view=False):
     if view:
         # If -v flag present do:
-        subprocess.Popen(["okular", dest])
+        subprocess.Popen(['okular', dest])
         exit(0)
     try: # Open or create the note and path
         if not os.path.exists(dest):
@@ -46,6 +46,9 @@ def zettel_edit(dest: Path, view=False):
         print('Error: Could not open the note', f, file=stderr)
         exit(1)
     finally:
+        with open('utils/lastOpenedNote', 'w') as writeLastNote:
+            writeLastNote.write(str(dest))
+            writeLastNote.close()
         subprocess.run([os.environ['EDITOR'], dest])
 
 def cli() -> argparse.Namespace:
