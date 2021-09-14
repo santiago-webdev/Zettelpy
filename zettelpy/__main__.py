@@ -9,18 +9,40 @@ def slip_box(directory):
         if not os.path.isdir(directory):
             os.mkdir(directory)
             os.mkdir(directory + '/' + 'utils')
+            with open(directory + '/' + 'utils/lastOpenedNote', 'w') as lastOpenedNote:
+                pass
         os.chdir(directory)
     except NoteError as d:
         print('Error: Could not create directory', d, file=stderr)
         exit(1)
 
+def what_is_this(dest: Path):
+    if str(dest) == 'lastOpenedNote':
+        print('Open the lastOpenedNote')
+        with open('utils/lastOpenedNote', 'r') as readLastNote:
+            lastOpenedNote = readLastNote.read()
+            readLastNote.close()
+            print('This is last opened note', lastOpenedNote)
+            return lastOpenedNote
+    else:
+        print('Do not open the lastOpenedNote')
+    # destChar = str(dest)[:1]
+    # print(destChar)
+    # if (destChar == '@'):
+    #     print('This is a tag')
+    #     # and now it should search for a Luhmann-ID inside a note, to open it
+    # else:
+    #     print('This is not a tag')
+
+
 def zettel_edit(dest: Path, view=False):
-    try: # Open or create the note
-        # if not dest.is_file():
-        #     open(dest, 'w+')
+    if view:
+        # If -v flag present do:
+        subprocess.Popen(["okular", dest])
+        exit(0)
+    try: # Open or create the note and path
         if not os.path.exists(dest):
-            os.mkdir(os.path.split(dest)[0])
-            open(dest, 'w+')
+            os.makedirs(os.path.split(dest)[0], exist_ok=True)
     except NoteError as f:
         print('Error: Could not open the note', f, file=stderr)
         exit(1)
@@ -43,7 +65,8 @@ def main():
     notes_directory = (os.environ['HOME'] + '/.zettelpy')
 
     slip_box(notes_directory)
-    zettel_edit(args.destination, args.view)
+    print(what_is_this(args.destination))
+    # zettel_edit(args.destination, args.view)
 
 if __name__ == '__main__':
     main()
