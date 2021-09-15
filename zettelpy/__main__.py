@@ -1,4 +1,4 @@
-import argparse, sys, os, subprocess, re
+import argparse, sys, os, subprocess, re, datetime
 from os.path import exists
 from pathlib import Path
 
@@ -9,7 +9,9 @@ def cli() -> argparse.Namespace:
     parser = argparse.ArgumentParser(prog='zettelpy',
         description='Personal Knowledge System based on Zettelkasten')
     parser.add_argument('destination',
+        nargs='?',
         type=Path,
+        default='Fleeting',
         help='Provide path/Title or Luhmann-ID to go to note')
     parser.add_argument('-v', '--view',
         action='store_true',
@@ -21,6 +23,7 @@ def slip_box(directory):
         if not os.path.isdir(directory):
             os.mkdir(directory)
             os.mkdir(directory + '/' + 'utils')
+            os.mkdir(directory + '/' + 'Fleeting')
             with open(directory + '/' + 'utils/lastOpenedNote', 'w') as lastOpenedNote:
                 pass
         os.chdir(directory)
@@ -29,17 +32,29 @@ def slip_box(directory):
         exit(1)
 
 def define_path(dest: Path):
+    # lastOpenedNote
     if str(dest) == 'lastOpenedNote':
         with open('utils/lastOpenedNote', 'r') as readLastNote:
             temp = readLastNote.read().rstrip('\n')
             return temp
+    elif str(dest)[:1] == '@':
+        auxVar = subprocess.check_output(['rg', '-w', '-l', dest])
+        auxiliar = str(auxVar)
+        return auxiliar[2:-3]
+    # Fleeting notes
     else:
-        if (str(dest)[:1] == '@'):
-            auxVar = subprocess.check_output(['rg', '-w', '-l', dest])
-            auxiliar = str(auxVar)
-            return auxiliar[2:-3]
-        else:
-            return dest
+        # Now I need to add the logic for creating a note each day and add the date and hour
+        todaysNote = ('Fleeting/note-' + datetime.date.today().strftime("%Y-%m-%d") + '.md')
+        todaysTitle = ('# Notes for ' + datetime.date.today().strftime("%b %d, %Y"))
+        hoursTitle = ('# At ' + str(datetime.datetime.now().strftime("%H:%M")))
+        # If the note doesn't exists, create it
+        if not exists(todaysNote):
+            with open(todaysNote, 'w') as fleetingNote:
+                fleetingNote.write(todaysTitle + "\n\n")
+        # Each time I enter to the Fleeting note of the day it will insert hour and minutes
+        with open(todaysNote, 'a') as fleetingNote:
+            fleetingNote.write(hoursTitle)
+        return todaysNote
 
 def zettel_edit(dest: Path, view=False):
     # If the -v is present open the file and ignore everything else
