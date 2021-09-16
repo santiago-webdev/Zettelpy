@@ -37,12 +37,13 @@ def define_path(dest: Path):
         with open('utils/lastOpenedNote', 'r') as readLastNote:
             temp = readLastNote.read().rstrip('\n')
             return temp
+    # Luhmann-ID
     elif str(dest)[:1] == '@':
         auxVar = subprocess.check_output(['rg', '-w', '-l', dest])
         auxiliar = str(auxVar)
         return auxiliar[2:-3]
     # Fleeting notes
-    else:
+    elif str(dest) == 'Fleeting':
         # Now I need to add the logic for creating a note each day and add the date and hour
         todaysNote = ('Fleeting/note-' + datetime.date.today().strftime("%Y-%m-%d") + '.md')
         todaysTitle = ('# Notes for ' + datetime.date.today().strftime("%b %d, %Y"))
@@ -53,8 +54,10 @@ def define_path(dest: Path):
                 fleetingNote.write(todaysTitle + "\n\n")
         # Each time I enter to the Fleeting note of the day it will insert hour and minutes
         with open(todaysNote, 'a') as fleetingNote:
-            fleetingNote.write(hoursTitle)
+            fleetingNote.write(hoursTitle + "\n\n")
         return todaysNote
+    else:
+        return dest
 
 def zettel_edit(dest: Path, view=False):
     # If the -v is present open the file and ignore everything else
@@ -85,6 +88,8 @@ def main():
     notes_directory = (os.environ['HOME'] + '/.zettelpy')
     # Checks environment
     slip_box(notes_directory)
+    # Refresh the tags(IDs)
+    subprocess.Popen(['ctags', '-R', '.'])
     # Edit the dest and note
     zettel_edit(define_path(args.destination), args.view)
 
