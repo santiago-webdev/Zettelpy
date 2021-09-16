@@ -62,3 +62,5 @@ I will list them in here:
 - Make okular be easily changeable
 - Indexing of the notes
 - Change Title on the permanent notes to the actual name of the note introduced
+- Cleaning of empty files
+- How to execute zettelpy from krunner without a plugin
