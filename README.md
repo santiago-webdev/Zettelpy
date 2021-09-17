@@ -61,6 +61,13 @@ I will list them in here:
 - Create a krunner plugin
 - Make okular be easily changeable
 - Indexing of the notes
-- Change Title on the permanent notes to the actual name of the note introduced
 - Cleaning of empty files
 - How to execute zettelpy from krunner without a plugin
+
+## Notes
+- Change Title on the permanent notes to the actual name of the note introduced
+This is a problem that I don't really know how to "fix", now when you create a
+new note the file name will get inserted, with extension included, I know I can
+use [:2] to ignore the .md extension, but what about other names an extensions?
+I don't think I understand enough of this to deal with it so I'll leave it like
+that, beacause at least now it doesn't just say '# Title'.

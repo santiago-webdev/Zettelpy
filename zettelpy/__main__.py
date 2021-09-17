@@ -77,7 +77,8 @@ def zettel_edit(dest: Path, view=False):
         # If the note doesn't exists create it and put template on it
         if not exists(dest):
             with open(dest, 'w') as destNote:
-                destNote.write('# Title\n## @\n\n\n')
+                titleNote = ('# ' + os.path.basename(str(dest)) + '\n## @\n\n\n')
+                destNote.write(titleNote)
         # And open with the default EDITOR
         subprocess.run([os.environ['EDITOR'], dest])
 
