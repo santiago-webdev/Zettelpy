@@ -16,23 +16,23 @@ By default everything will go into .local/share/zettelpy
 *Check the dependencies below first, they will eventually change, I just need
 to think how to. Maybe I'll add a config file, but not for now.*
 
-You can delete the repo because the program gets installed locally on
-.local/lib/python3.9/site-packages/
+You can either delete the repo because the program gets installed locally on
+.local/lib/python3.9/site-packages/ with this command:
 ```bash
 pip install .
 ```
 
-To update it.
+And to update it.
 ```bash
 pip install --upgrade .
 ```
 
-Use the repo as the install directory, just git pull each time you want to update.
+Or use the repo as the install directory, just git pull each time you want to update.
 ```bash
 pip install -e .
 ```
 
-Install python requirements, and then check the dependencies
+Then install python requirements, and then check the dependencies
 ```bash
 pip install -r requirements.txt
 ```
@@ -61,8 +61,8 @@ And now it should supposedly work fine.
 - Having an $EDITOR setted up. I'm using Neovim in here
 - For identifying the Luhmann-ID I'm using ctags, it works well with Neovim.
 - Ripgrep, to search for the ID from outside
-- Okular (I would find a way to change this in the mean time just don't use
-  "-v")
+- Okular (I would find a way to change this in the meantime just don't use
+  "-v" if you don't like it)
 - For creating the index.md I'm using a command called exa, it probably is in
   your distro's repo
 
@@ -79,34 +79,46 @@ Or simply:
 zettelpy
 ```
 
-### Notes with Title
+### Create notes with Title
 You can create or view notes for a book, or about something that you want to
 permanently save. Use quotes for names with spaces and add the extension.
 ```bash
 zettelpy Books/"The Aleph.md"
 ```
 
-### Notes by Luhmann-ID
-On the notes that gets created automatically you would see that on the second
-line there's an "## @", you can add your Luhmann-ID, i.e. ## @1b2e, so that
-then when you search for it, it would be picked up by the program:
+### Search notes by the ID
+When you are inside the note that you created, you will see on the second line
+of the file there's a ## @ place holder, there you can put your ID, it would be
+useful to connect each note between each other, and to search for them
 ```bash
-zettelpy @1b2e
+zettelpy @1b2e # It will try to locate a note that on the second line has a ## @1b2e
 ```
 
 ### Access to the last edited/viewed note
 As with the fleeting notes, you can type *lastOpenedNote* and it would open the
-last note that you access, and you can't have a note on the root of your notes
-that is called *lastOpenedNote* just like with *Fleeting*.
+last note that you access, as it happens with *Fleeting*, you can't have a note
+called *lastOpenedNote* on the root of you directory of notes, because it will
+launch the mode, not the note of the same name.
+```bash
+zettelpy lastOpenedNote
+```
 
 ## Flags
-As of right now I only have one flag on the program, the -v flag.
 It doesn't matter the note that you were working on, it will open it with
-okular, but you can easily change that if you open the code because okular
-appears only once.
+okular.
 ```bash
-zettelpy Books/"The Aleph.md"
+zettelpy -v Books/"The Aleph.md"
 ```
+
+```bash
+zettelpy -v lastOpenedNote
+```
+
+```bash
+zettelpy @3b7s -v
+```
+_I haven't put the effort to make it for you to change the default viewer
+for now it's okular_
 
 # Things that I need to add
 There's a bunch of them, honestly I only made this program to see if I liked
@@ -120,8 +132,8 @@ I will list them in here:
 - Create a krunner plugin
 - Make okular be easily changeable
 - How to execute zettelpy from krunner without a plugin
-- The ctags configs in the installer
 - Install dependencies based on the distro
+- Define dependencies for python
 
 ## Notes
 - Change Title on the permanent notes to the actual name of the note introduced
