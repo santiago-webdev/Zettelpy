@@ -1,0 +1,7 @@
+--langdef=mdtags
+--languages=mdtags
+--langmap=mdtags:.md
+--kinddef-mdtags=t,tag,tags
+--_tabledef-mdtags=toplevel
+--_mtable-regex-mdtags=toplevel/(^|[[:space:]])@([a-zA-Z0-9][^[:space:]]*)/\2/t/{mgroup=1}{tenter=toplevel}
+--_mtable-regex-mdtags=toplevel/.//
