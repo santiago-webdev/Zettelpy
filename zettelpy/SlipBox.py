@@ -1,12 +1,12 @@
 import subprocess
 import os
-from pathlib import Path  # Manage paths
 
 
 # Create or check the directories
 class SlipBox:
     def __init__(self, directory):
         self.directory = directory
+
     def initializeBox(self):
         try:
             # Check if the zettelpy directory exists
@@ -30,11 +30,13 @@ class SlipBox:
             os.chdir(self.directory)
         except Exception as d: print (d) & exit(1)
 
+
 # Create a defined type of note based on the type of argument given
 class Zettel:
     def __init__(self, dest, view=False):
         self.dest = dest
         self.view = view
+
     def createZettel(self):
         # If the -v is present open the file and ignore everything else
         if self.view:
@@ -46,7 +48,7 @@ class Zettel:
         except Exception as f: print(f) & exit(1)
         finally:
             with open('.utils/lastOpenedNote', 'w+') as lastOpenedNote:
-                lastOpenedNote.write(str(self.dest)) # Rewrites to the lastNote
+                lastOpenedNote.write(str(self.dest))  # Rewrites to the lastNote
             # If the note doesn't exists create it and put template on it
             if not os.path.exists(self.dest):
                 with open(self.dest, 'w') as destNote:

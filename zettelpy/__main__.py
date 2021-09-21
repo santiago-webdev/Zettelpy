@@ -1,10 +1,8 @@
 import os
 import sys
-from .SlipBox import SlipBox
-from .SlipBox import Zettel # Import Zettel(notes) and Slip Box objects
-from .funcmodule import cli
-from .funcmodule import index_notes
-from .funcmodule import retrieve_path
+from .SlipBox import SlipBox, Zettel  # Import Zettel(notes) and Slip Box objects
+from .func_module import cli, index_notes, retrieve_path
+
 
 def main():
     # The arguments come from argparse, from the imported cli function
@@ -28,6 +26,7 @@ def main():
     # Edit/create the note
     editZettel = Zettel(actual_path_note, args.view)
     editZettel.createZettel()
+
 
 if __name__ == '__main__':
     main()

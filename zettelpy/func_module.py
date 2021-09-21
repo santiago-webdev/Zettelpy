@@ -7,6 +7,7 @@ from pathlib import Path  # Manage paths
 
 # Parse the arguments
 def cli() -> argparse.Namespace:
+
     parser = argparse.ArgumentParser(prog='zettelpy',
         description='Personal Knowledge System based on Zettelkasten')
 
@@ -25,12 +26,14 @@ def cli() -> argparse.Namespace:
 
     return parser.parse_args()
 
+
 # Redoes the index and clean empty directories and files
 def index_notes(notesDirectory, index=False):
-    if index:
+    if index is True:
         subprocess.Popen(['.utils/zettelpy-redo-notes', notesDirectory])
         subprocess.run([os.environ['EDITOR'], 'index.md'])
         exit(0)
+
 
 def retrieve_path(dest: Path):
     # lastOpenedNote
@@ -39,10 +42,11 @@ def retrieve_path(dest: Path):
             return lastOpenedNote.read().rstrip('\n')
 
     # Luhmann-ID
-    elif str(dest)[:1] == '@':
-        auxVar = subprocess.check_output(['rg', '-w', '-l', '## ' + str(dest)])
-        auxiliar = str(auxVar)
-        return auxiliar[2:-3]
+    elif str(dest).startswith('@'):
+        try:
+            return str(subprocess.check_output(['rg', '-w', '-l', '## ' + str(dest)]))[2:-3]
+        except Exception as t:
+            print(t)
 
     # Fleeting notes
     elif str(dest) == 'Fleeting':
