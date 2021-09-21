@@ -89,10 +89,12 @@ zettelpy Books/"The Aleph.md"
 ### Search notes by the ID
 When you are inside the note that you created, you will see on the second line
 of the file there's a ## @ place holder, there you can put your ID, it would be
-useful to connect each note between each other, and to search for them
+useful to connect each note between each other, and to search for them.
 ```bash
-zettelpy @1b2e # It will try to locate a note that on the second line has a ## @1b2e
+zettelpy @1b2e
 ```
+
+This will try to locate a note that on the second line has a ## @1b2e
 
 ### Access to the last edited/viewed note
 As with the fleeting notes, you can type *lastOpenedNote* and it would open the
