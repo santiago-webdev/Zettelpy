@@ -104,6 +104,7 @@ zettelpy lastOpenedNote
 ```
 
 ## Flags
+### View
 It doesn't matter the note that you were working on, it will open it with
 okular.
 ```bash
@@ -119,6 +120,18 @@ zettelpy @3b7s -v
 ```
 _I haven't put the effort to make it for you to change the default viewer
 for now it's okular_
+
+### Indexing
+If you want to see the tree of notes pass the -i flag, it will throw you into
+you editor(in my case neovim), where you could move to any file and gf to move
+to the file
+
+```bash
+zettelpy -i
+```
+Note about this flag: *If you pass this flag it will ignore everything else,
+it's just for cleaning the directory of empty files refreshing ctags and
+showing you the index*
 
 # Things that I need to add
 There's a bunch of them, honestly I only made this program to see if I liked
