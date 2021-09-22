@@ -151,9 +151,8 @@ I will list them in here:
 - Define dependencies for python
 
 ## Notes
-- Change Title on the permanent notes to the actual name of the note introduced
-This is a problem that I don't really know how to "fix", now when you create a
-new note the file name will get inserted, with extension included, I know I can
-use [:2] to ignore the .md extension, but what about other names an extensions?
-I don't think I understand enough of this to deal with it so I'll leave it like
-that, beacause at least now it doesn't just say '# Title'.
+- When you create a note, most of the time you are going to use some kind
+  of extension, in my case most of the notes will be .md, when you enter
+  the note, in the first line you will see this title, including the .md, I
+  know it doesn't look pretty, but I don't really know how to filter the
+  extension, I will try and fix it.
