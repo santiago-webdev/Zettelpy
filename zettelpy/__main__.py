@@ -12,8 +12,8 @@ def main():
     notes_directory = (os.environ['HOME'] + '/.local/share/zettelpy')
 
     # Checking if the directories exists
-    checkSlipBox = SlipBox(str(notes_directory))
-    checkSlipBox.initializeBox()
+    CheckSlipBox = SlipBox(str(notes_directory))
+    CheckSlipBox.initialize_box()
 
     # If you parse -i it will clean empty files, regenarate ctags and index to
     # view it, if you don't it will just skip this part.
@@ -24,8 +24,8 @@ def main():
     actual_path_note = retrieve_path(args.destination)
 
     # Edit/create the note
-    editZettel = Zettel(actual_path_note, args.view)
-    editZettel.createZettel()
+    EditZettel = Zettel(actual_path_note, args.view)
+    EditZettel.create_zettel()
 
 
 if __name__ == '__main__':

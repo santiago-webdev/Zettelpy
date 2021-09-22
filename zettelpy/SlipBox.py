@@ -7,7 +7,7 @@ class SlipBox:
     def __init__(self, directory):
         self.directory = directory
 
-    def initializeBox(self):
+    def initialize_box(self):
         try:
             # Check if the zettelpy directory exists
             if not os.path.exists(self.directory):
@@ -37,7 +37,7 @@ class Zettel:
         self.dest = dest
         self.view = view
 
-    def createZettel(self):
+    def create_zettel(self):
         if self.view:  # If -v you view the note that you parsed
             subprocess.Popen(['okular', self.dest])
             exit(0)
