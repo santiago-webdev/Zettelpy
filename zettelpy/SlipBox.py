@@ -38,8 +38,7 @@ class Zettel:
         self.view = view
 
     def createZettel(self):
-        # If the -v is present open the file and ignore everything else
-        if self.view:
+        if self.view:  # If -v you view the note that you parsed
             subprocess.Popen(['okular', self.dest])
             exit(0)
         try:
@@ -49,10 +48,11 @@ class Zettel:
         finally:
             with open('.utils/lastOpenedNote', 'w+') as lastOpenedNote:
                 lastOpenedNote.write(str(self.dest))  # Rewrites to the lastNote
-            # If the note doesn't exists create it and put template on it
+            # If the note doesn't exists create and insert template
             if not os.path.exists(self.dest):
                 with open(self.dest, 'w') as destNote:
-                    titleNote = ('# ' + os.path.basename(str(self.dest)) + '\n## @\n\n\n')
-                    destNote.write(titleNote)
-            # And open with the default EDITOR
-            subprocess.run([os.environ['EDITOR'], self.dest])
+                    title_note = ('# ' +
+                            os.path.splitext(os.path.basename(str(self.dest)))[0]+'' +
+                            '\n## @\n\n\n')  # Generate the template
+                    destNote.write(title_note)  # And insert it
+            subprocess.run([os.environ['EDITOR'], self.dest])  # Open the note

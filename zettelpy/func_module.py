@@ -51,16 +51,16 @@ def retrieve_path(dest: Path):
     # Fleeting notes
     elif str(dest) == 'Fleeting':
         # Now I need to add the logic for creating a note each day and add the date and hour
-        todaysNote = ('Fleeting/note-' + datetime.date.today().strftime("%Y-%m-%d") + '.md')
-        todaysTitle = ('# Notes for ' + datetime.date.today().strftime("%b %d, %Y") + '\n')
-        hoursTitle = ('\n# At ' + str(datetime.datetime.now().strftime("%H:%M")))
+        todays_note = ('Fleeting/note-' + datetime.date.today().strftime("%Y-%m-%d") + '.md')
+        todays_title = ('# Notes for ' + datetime.date.today().strftime("%b %d, %Y") + '\n')
+        hours_title = ('\n# At ' + str(datetime.datetime.now().strftime("%H:%M")))
         # If the note doesn't exists, create it
-        if not os.path.exists(todaysNote):
-            with open(todaysNote, 'w+') as fleetingNote:
-                fleetingNote.write(todaysTitle + "\n\n")
+        if not os.path.exists(todays_note):
+            with open(todays_note, 'w+') as fleetingNote:
+                fleetingNote.write(todays_title + "\n\n")
         # Each time I enter to the Fleeting note of the day it will insert hour and minutes
-        with open(todaysNote, 'a') as fleetingNote:
-            fleetingNote.write(hoursTitle + "\n\n")
-        return todaysNote
+        with open(todays_note, 'a') as fleetingNote:
+            fleetingNote.write(hours_title + "\n\n")
+        return todays_note
     else:
         return dest
