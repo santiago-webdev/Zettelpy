@@ -12,57 +12,51 @@ a lot of things that I'm not providing to make it work correctly and safely.
 By default everything will go into .local/share/zettelpy
 
 ## How to install
+*Check the dependencies below first*
 
-*Check the dependencies below first, they will eventually change, I just need
-to think how to. Maybe I'll add a config file, but not for now.*
+Move to the repo, and then:
 
-You can either delete the repo because the program gets installed locally on
-.local/lib/python3.9/site-packages/ with this command:
-```bash
-pip install .
-```
-
-And to update it.
-```bash
-pip install --upgrade .
-```
-
-Or use the repo as the install directory, just git pull each time you want to update.
+You can either use the repo as the install directory. Use git pull to update
 ```bash
 pip install -e .
 ```
 
-Then install python requirements, and then check the dependencies
+Or install it locally in your machine
 ```bash
-pip install -r requirements.txt
+pip install .
+pip install --upgrade . # To update the program
 ```
 
-Now that you have everything related to python installed, you need to run
-zettelpy once:
+You already have everything related to python installed, now you need to run the
+program once, this will generate a config file and exit the program so that you
+can modify it
 ```bash
-zettelpy # And quit inmediately
+zettelpy # This will quit the program inmediately, read what it says
 ```
 
-The program will create the basic structure and folders, but you need to
-enable/install the other features, so that the program behaves properly, that's
-why I said quit immediately, so after this you need to install everything
-else, it's just files for ctags to detect tags properly, another shell script
-that I use on the program to clean empty files and a file that ripgrep uses
-to ignore directories so that they don't appear when searching by ID.
+So basically you now have a file to configure the program, most of us will have
+it in ~/.config/zettelpyrc.ini enter in there and change as you will, after this
+you need to copy some files, in the repo you will find a directory called
+"needed", enter this folder and cp the files to your notes directory like this:
+
+For the first copy command both files go into the root of your notes directory.
+
+For the second copy it goes under the folder '.utils' in your notes directory.
+
+*I eventually will automate this part*
 
 ```bash
-./install.sh
+cp -r .rgignore .ctags.d ~/root/of/notes/directory
+cp zettelpy-redo-notes ~/this/goes/under/.utils
 ```
 
 And now it should supposedly work fine.
 
 ## Dependencies
 - Python 3, there's some function that I think are not present on Python 2.
-- Having an $EDITOR setted up. I'm using Neovim in here
 - For identifying the Luhmann-ID I'm using ctags, it works well with Neovim.
 - Ripgrep, to search for the ID from outside
-- Okular (I would find a way to change this in the meantime just don't use
-  "-v" if you don't like it)
+- Some program to view the notes, see the config
 - For creating the index.md I'm using a command called exa, it probably is in
   your distro's repo
 

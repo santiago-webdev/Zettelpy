@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name = 'zettelpy',
-    version = '0.1.1',
+    version = '0.2.0',
     author='Santiago Gonzalez',
     author_email='santiagogonzalezbogado@gmail.com',
     description='Personal Knowledge System based on Zettelkasten',
