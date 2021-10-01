@@ -8,15 +8,12 @@ Yes, it's a mess, I don't even know what I'm trying to accomplish in here, this
 is going to be another one of those projects. Just don't use it because there's
 a lot of things that I'm not providing to make it work correctly and safely.
 
-# Where are the notes getting stored?
-By default everything will go into .local/share/zettelpy
-
 ## How to install
 *Check the dependencies below first*
 
 Move to the repo, and then:
 
-You can either use the repo as the install directory. Use git pull to update
+You can either use the repo as the install directory and use git pull to update
 ```bash
 pip install -e .
 ```
@@ -24,7 +21,7 @@ pip install -e .
 Or install it locally in your machine
 ```bash
 pip install .
-pip install --upgrade . # To update the program
+pip install --upgrade . # To update the program from the repo
 ```
 
 You already have everything related to python installed, now you need to run the
@@ -34,31 +31,24 @@ can modify it
 zettelpy # This will quit the program inmediately, read what it says
 ```
 
+### This creates a config file
 So basically you now have a file to configure the program, most of us will have
-it in ~/.config/zettelpyrc.ini enter in there and change as you will, after this
-you need to copy some files, in the repo you will find a directory called
-"needed", enter this folder and cp the files to your notes directory like this:
-
-For the first copy command both files go into the root of your notes directory.
-
-For the second copy it goes under the folder '.utils' in your notes directory.
-
-*I eventually will automate this part*
-
+it in ~/.config/zettelpyrc.ini after this you need to go to the needed
+directory inside this projects repo and copy _.ctags.d_ and _.rgignore_ to the
+root of your notes directory.
 ```bash
-cp -r .rgignore .ctags.d ~/root/of/notes/directory
-cp zettelpy-redo-notes ~/this/goes/under/.utils
+cd needed
+cp -r .ctags.d .rgignore ~/root/of/notes/directory
 ```
 
-And now it should supposedly work fine.
+And now everything **should** work.
 
 ## Dependencies
-- Python 3, there's some function that I think are not present on Python 2.
-- For identifying the Luhmann-ID I'm using ctags, it works well with Neovim.
+- Python 3.4 or later, there's some function that I think are not present on versions below 3.4
+- For identifying the Luhmann-ID I'm using ctags, it works well with Neovim
 - Ripgrep, to search for the ID from outside
-- Some program to view the notes, see the config
-- For creating the index.md I'm using a command called exa, it probably is in
-  your distro's repo
+- Some program to view the notes, see the config file, by default I choosed
+  okular beacuse it's what I use
 
 # Usage:
 ### Fleeting notes
@@ -139,7 +129,5 @@ I will list them in here:
 - Show a list of notes by ID and title
 - Create tab completion for notes already created
 - Create a krunner plugin
-- Make okular be easily changeable
 - How to execute zettelpy from krunner without a plugin
-- Install dependencies based on the distro
 - Define dependencies for python

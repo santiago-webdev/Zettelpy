@@ -1,5 +1,6 @@
 import subprocess
 import os
+from pathlib import Path  # Manage paths
 
 
 class SlipBox:  # Create or check the directories
@@ -7,19 +8,14 @@ class SlipBox:  # Create or check the directories
         self.directory = directory
 
     def initialize_box(self):
-        try:  # Check if each directories and files exists
-            if not os.path.exists(self.directory):
-                os.mkdir(self.directory)
-
-            if not os.path.exists(self.directory + '/' + 'Fleeting'):
-                os.mkdir(self.directory + '/' + 'Fleeting')
-
-            if not os.path.exists(self.directory + '/' + '.utils'):
-                os.mkdir(self.directory + '/' + '.utils')
-                print('There\'s some missing files, check the README')
-
+        try:  # Check and create base directories
+            NOTES_PATH = Path(self.directory + '/Notes/Fleeting')
+            if not NOTES_PATH.is_dir():
+                NOTES_PATH.mkdir(parents=True, exist_ok=True)
             os.chdir(self.directory)  # Change to the directory of the notes
-        except Exception as d: print (d) & exit(1)
+        except Exception as d:
+            print(d)
+            exit(1)
 
 
 class Zettel:  # Create a defined type of note based on the type of argument given
@@ -28,20 +24,29 @@ class Zettel:  # Create a defined type of note based on the type of argument giv
         self.view = view
 
     def create_zettel(self, NOTES_VIEW, NOTES_EDITOR):
-        if self.view:  # If -v you view the note that you parsed
-            subprocess.Popen([NOTES_VIEW, self.dest])
-            exit(0)
+        zettel_dest = Path(self.dest)  # I use this variable as a mind helper, to know what I'm working with
+
+        if self.view:
+            if zettel_dest.is_file():
+                subprocess.Popen([NOTES_VIEW, zettel_dest])
+                exit(0)
+            else:
+                print('The note that you are trying to view doesn\'t exists')
+                exit(1)
+
         try:
-            if not os.path.exists(self.dest):  # Create note if it doesn't exists
-                os.makedirs(os.path.split(self.dest)[0], exist_ok=True)
-        except Exception as f: print(f) & exit(1)
+            if not zettel_dest.exists():
+                os.makedirs(zettel_dest.parent, exist_ok=True)
+        except Exception as f:
+            print(f)
+            exit(1)
         finally:
-            with open('.utils/lastOpenedNote', 'w+') as lastOpenedNote:
-                lastOpenedNote.write(str(self.dest))  # Rewrites to lastOpenedNote
-            if not os.path.exists(self.dest):
-                with open(self.dest, 'w') as destNote:
+            with open('lastOpenedNote', 'w') as lastOpenedNote:
+                lastOpenedNote.write(str(zettel_dest))  # Rewrites to lastOpenedNote
+            if not zettel_dest.exists():
+                with open(zettel_dest, 'w') as destNote:
                     title_note = ('# ' +
-                            os.path.splitext(os.path.basename(str(self.dest)))[0]+'' +
+                            os.path.splitext(os.path.basename(str(zettel_dest)))[0]+'' +
                             '\n## @\n\n\n')  # Generate the template
                     destNote.write(title_note)  # And insert it
-            subprocess.run([NOTES_EDITOR, self.dest])  # Open the note
+            subprocess.run([NOTES_EDITOR, zettel_dest])  # Open the note

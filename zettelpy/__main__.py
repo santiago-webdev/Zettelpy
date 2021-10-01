@@ -1,7 +1,6 @@
-import os
-import sys
+from .parse_module import cli, cli_config
 from .SlipBox import SlipBox, Zettel # Import objects
-from .func_module import cli, cli_config, index_notes, retrieve_path  # Import functions
+from .func_module import index_notes, retrieve_path  # Import functions
 
 
 def main():
@@ -18,12 +17,8 @@ def main():
     checks_slip_box = SlipBox(NOTES_DIRECTORY)  # Creates object in the define directory
     checks_slip_box.initialize_box()  # Checking if all the directories inside it exists
 
-    # If you parse -i it will clean empty files, regenarate ctags and index to
-    # view it, if you don't it will just skip this part.
     index_notes(NOTES_DIRECTORY, NOTES_EDITOR, args.index)
 
-    # Parse a keyword or title and return the real path of the note that we are
-    # looking for
     actual_path_note = retrieve_path(args.destination)
 
     edit_zettel = Zettel(actual_path_note, args.view)
@@ -32,3 +27,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+# TODO
+# Implement pathlib correctly and not use a combination of Path and strings which is wrong
