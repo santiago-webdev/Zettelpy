@@ -3,10 +3,16 @@ A personal knowledge management system based on Zettelkasten, the name it's
 basically because it's written mostly in Python, but there's some functions
 that I find easier to automate with shell scripting
 
-# The project is a mess
-Yes, it's a mess, I don't even know what I'm trying to accomplish in here, this
-is going to be another one of those projects. Just don't use it because there's
-a lot of things that I'm not providing to make it work correctly and safely.
+For now it just stores your notes in the directory that you choosed to
+You can add the extension of any note, but make sure that it ends with .md
+because the index only picks up the notes written in markdown and ignores all
+the snippets of code or other types of files that you can create or have inside
+your notes directory.
+
+*Additional notes:*
+- I think this cli only works in Mac and Linux.
+- I'm very open to PR or suggestions
+- There's a todo list at the end of the file with things that I need to add
 
 ## How to install
 *Check the dependencies below first*
@@ -118,6 +124,11 @@ zettelpy -i
 Note about this flag: *If you pass this flag it will ignore everything else,
 it's just for cleaning the directory of empty files refreshing ctags and
 showing you the index*
+
+# The project is a mess
+Yes, it's a mess, I don't even know what I'm trying to accomplish in here, this
+is going to be another one of those projects. Just don't use it because there's
+a lot of things that I'm not providing to make it work correctly and safely.
 
 # Things that I need to add
 There's a bunch of them, honestly I only made this program to see if I liked

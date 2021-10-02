@@ -9,6 +9,7 @@ def index_notes(NOTES_DIRECTORY, NOTES_EDITOR, index=False):
         subprocess.call(['find', '.', '-empty', '-type', 'f', '-delete'])  # Deletes the empty files
         with open(index_path, 'w') as f:
             subprocess.call(['find', '.', '-name', '*.md'], stdout=f)  # Creates an index of notes
+            subprocess.call(['ctags', '-R', '.'])
         subprocess.run([NOTES_EDITOR, index_path])  # View index with editor selected in your config
         exit(0)
 
@@ -30,8 +31,10 @@ def retrieve_path(dest: Path):
     elif str(dest) == 'Fleeting':  # Fleeting notes
         todays_note = Path('Notes/Fleeting/note-' +
                 datetime.date.today().strftime("%Y-%m-%d") + '.md')
-        todays_title = ('# Notes for ' + datetime.date.today().strftime("%b %d, %Y") + '\n')
-        hours_title = ('\n# At ' + str(datetime.datetime.now().strftime("%H:%M")))
+        todays_title = ('# Notes for ' +
+                datetime.date.today().strftime("%b %d, %Y") + '\n')
+        hours_title = ('\n# At ' +
+                str(datetime.datetime.now().strftime("%H:%M")))
         if not todays_note.is_file():  # If the note doesn't exists, create it
             with open(todays_note, 'w+') as fleetingNote:
                 fleetingNote.write(todays_title + "\n\n")
