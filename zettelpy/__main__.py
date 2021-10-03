@@ -27,3 +27,6 @@ if __name__ == '__main__':
 
 # TODO
 # Implement pathlib correctly and not use a combination of Path and strings which is wrong
+# Fix using ripgrep instead of python, should use os.walk() I guess
+# fix non existing IDs parsed, how should the program react to that?
+# fix creating note if ID doesn't exists

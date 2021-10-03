@@ -29,9 +29,10 @@ def cli_config():  # Parse the user configurations, or use defaults
     if not os.path.exists(CONFIG_LOCATE):  # Check if config file exists
         default_config = ConfigParser()
         default_config['settings'] = {
-            'NOTES_DIRECTORY': (os.environ['XDG_DATA_HOME'] + '/zettelpy'),
-            'NOTES_EDITOR': (os.environ['EDITOR']),
-            'NOTES_VIEW': 'okular'
+            'notes_directory': (os.environ['XDG_DATA_HOME'] + '/zettelpy'),
+            'notes_editor': (os.environ['EDITOR']),
+            'notes_view': 'okular',
+            'use_db': 'no'
             }
         with open(CONFIG_LOCATE, 'w') as userConfig:
             default_config.write(userConfig)

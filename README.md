@@ -17,7 +17,13 @@ your notes directory.
 ## How to install
 *Check the dependencies below first*
 
-Move to the repo, and then:
+### Install requirements for the program
+```bash
+pip install -r requirements.txt
+```
+This will install all the modules that my program uses.
+
+Now move to the repo, and then follow this steps:
 
 You can either use the repo as the install directory and use git pull to update
 ```bash

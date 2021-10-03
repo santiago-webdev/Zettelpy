@@ -1,4 +1,3 @@
 argparse
 pathlib
-subprocess
 datetime
