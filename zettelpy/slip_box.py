@@ -1,6 +1,7 @@
 import subprocess
 import os
 from pathlib import Path  # Manage paths
+from .func_module import last_opened_note  # To write to lastOpenedNote
 
 
 class SlipBox:  # Create or check the directories
@@ -41,8 +42,6 @@ class Zettel:  # Create a defined type of note based on the type of argument giv
             print(f)
             exit(1)
         finally:
-            with open('lastOpenedNote', 'w') as lastOpenedNote:
-                lastOpenedNote.write(str(zettel_dest))  # Rewrites to lastOpenedNote
             if not zettel_dest.exists():
                 with open(zettel_dest, 'w') as destNote:
                     title_note = ('# ' +
@@ -50,3 +49,4 @@ class Zettel:  # Create a defined type of note based on the type of argument giv
                             '\n## @\n\n\n')  # Generate the template
                     destNote.write(title_note)  # And insert it
             subprocess.run([NOTES_EDITOR, zettel_dest])  # Open the note
+            last_opened_note(zettel_dest)

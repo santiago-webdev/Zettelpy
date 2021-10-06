@@ -14,17 +14,35 @@ def index_notes(NOTES_DIRECTORY, NOTES_EDITOR, index=False):
         exit(0)
 
 
-def retrieve_path(dest: Path):
-    if str(dest) == 'lastOpenedNote':  # lastOpenedNote
-        with open('lastOpenedNote', 'r') as lastOpenedNote:
-            return lastOpenedNote.read().rstrip('\n')
+def last_opened_note(mode: Path):
+    try:
+        if mode == None:
+            with open('lastOpenedNote', 'r') as l:  # Read mode
+                return l.read().rstrip('\n')
+        else:
+            if mode.is_file():  # Check if note exists, and then writes
+                with open('lastOpenedNote', 'w') as l:  # Write mode
+                    l.write(str(mode))
+            else:
+                raise Exception('The note doesn\'t exists')
+    except Exception as l:
+        print(r)
+        exit(1)
 
-    elif str(dest).startswith('@'):  # Luhmann-ID
+def retrieve_path(dest: Path):
+    dest_path = str(dest)  # I'm casting a Path to a string
+
+    if dest_path == 'lastOpenedNote':  # lastOpenedNote
+        return last_opened_note(None)
+
+    elif dest_path.startswith('@'):  # Luhmann-ID
         try:
             return str(subprocess.check_output(['rg', '-w', '-l', '## ' + str(dest)]))[2:-3]
-        except Exception as t: print(t)
+        except Exception as t:
+            print(t)
+            exit(1)
 
-    elif str(dest) == 'Fleeting':  # Fleeting notes
+    elif dest_path == 'Fleeting':  # Fleeting notes
 
         todays_note = Path('Notes/Fleeting/note-' +
                 datetime.date.today().strftime("%Y-%m-%d") + '.md')
@@ -34,11 +52,11 @@ def retrieve_path(dest: Path):
                 str(datetime.datetime.now().strftime("%H:%M")))
 
         if not todays_note.is_file():  # If the note doesn't exists, create it
-            with open(todays_note, 'w+') as fleetingNote:
-                fleetingNote.write(todays_title + "\n\n")
+            with open(todays_note, 'w+') as f:
+                f.write(todays_title + "\n\n")
 
-        with open(todays_note, 'a') as fleetingNote:  # Insert hour each time you enter the note
-            fleetingNote.write(hours_title + "\n\n")
+        with open(todays_note, 'a') as f:  # Insert hour each time you enter the note
+            f.write(hours_title + "\n\n")
         return todays_note
 
     else:
