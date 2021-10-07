@@ -15,19 +15,16 @@ def index_notes(NOTES_DIRECTORY, NOTES_EDITOR, index=False):
 
 
 def last_opened_note(mode: Path):
-    try:
-        if mode == None:
-            with open('lastOpenedNote', 'r') as l:  # Read mode
-                return l.read().rstrip('\n')
+    if mode == None:
+        with open('lastOpenedNote', 'r') as l:  # Read mode
+            return l.read().rstrip('\n')
+    else:
+        if mode.is_file():  # Check if note exists, and then writes
+            with open('lastOpenedNote', 'w') as l:  # Write mode
+                l.write(str(mode))
         else:
-            if mode.is_file():  # Check if note exists, and then writes
-                with open('lastOpenedNote', 'w') as l:  # Write mode
-                    l.write(str(mode))
-            else:
-                raise Exception('The note doesn\'t exists')
-    except Exception as l:
-        print(r)
-        exit(1)
+            raise Exception('Can\'t write to file')
+
 
 def retrieve_path(dest: Path):
     dest_path = str(dest)  # I'm casting a Path to a string
