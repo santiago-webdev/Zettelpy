@@ -1,6 +1,7 @@
 import datetime
 import subprocess
 from pathlib import Path
+from typing import Optional
 
 
 def index_notes(NOTES_DIRECTORY, NOTES_EDITOR, index=False):
@@ -14,7 +15,7 @@ def index_notes(NOTES_DIRECTORY, NOTES_EDITOR, index=False):
         exit(0)
 
 
-def last_opened_note(mode: Path):
+def last_opened_note(mode: Optional[Path]):
     if mode == None:
         with open('lastOpenedNote', 'r') as l:  # Read mode
             return l.read().rstrip('\n')
