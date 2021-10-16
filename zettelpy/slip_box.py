@@ -1,5 +1,6 @@
 import subprocess
 import os
+
 from pathlib import Path  # Manage paths
 from .func_module import last_opened_note  # To write to lastOpenedNote
 

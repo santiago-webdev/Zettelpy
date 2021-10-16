@@ -1,6 +1,6 @@
 from .parse_module import cli, cli_config
-from .slip_box import SlipBox, Zettel  # Import objects
-from .func_module import index_notes, retrieve_path  # Import functions
+from .slip_box import SlipBox, Zettel
+from .func_module import index_notes, retrieve_path
 
 
 def main():
