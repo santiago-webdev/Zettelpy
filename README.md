@@ -3,11 +3,8 @@ A personal knowledge management system based on Zettelkasten, the name it's
 basically because it's written mostly in Python, but there's some functions
 that I find easier to automate with shell scripting
 
-For now it just stores your notes in the directory that you choosed to
-You can add the extension of any note, but make sure that it ends with .md
-because the index only picks up the notes written in markdown and ignores all
-the snippets of code or other types of files that you can create or have inside
-your notes directory.
+By default it uses markdown and it's not necessary to type the extension, and
+it will ignore it if you put other extension.
 
 *Additional notes:*
 - I think this cli only works in Mac and Linux.
