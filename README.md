@@ -3,8 +3,8 @@ A personal knowledge management system based on Zettelkasten, the name it's
 basically because it's written mostly in Python, but there's some functions
 that I find easier to automate with shell scripting
 
-By default it uses markdown and it's not necessary to type the extension, and
-it will ignore it if you put other extension.
+By default it uses markdown and it's not necessary to type the extension, if
+you specify the extension another note with that extension will be created
 
 *Additional notes:*
 - I think this cli only works in Mac and Linux.
