@@ -6,8 +6,10 @@ that I find easier to automate with shell scripting
 By default it uses markdown and it's not necessary to type the extension, if
 you specify the extension another note with that extension will be created
 
-*Additional notes:*
-- I think this cli only works in Mac and Linux.
+*Some notes:*
+- The creation of tags(basically linking notes between each other using ctags) you need to add them manually to the
+  second line of each note, I haven't found a way of automating this as of right now.
+- I think this cli only works in Linux and Neovim.
 - I'm very open to PR or suggestions
 - There's a todo list at the end of the file with things that I need to add
 
@@ -139,9 +141,6 @@ Python, I will add them while I'm learning about it.
 
 I will list them in here:
 - Add a warning and create a note with that tag instead of throwing an
-  error when introducing a non existing ID(tags)
-- Show a list of notes by ID and title
-- Create tab completion for notes already created
-- Create a krunner plugin
-- How to execute zettelpy from krunner without a plugin
+  error when introducing a non existing ID
+- Automatic tag generation and insertion
 - Define dependencies for python
