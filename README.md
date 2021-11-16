@@ -1,38 +1,34 @@
 # Zettelpy
 A personal knowledge management system based on Zettelkasten, the name it's
-basically because it's written mostly in Python, but there's some functions
-that I find easier to automate with shell scripting
-
-By default it uses markdown and it's not necessary to type the extension, if
-you specify the extension another note with that extension will be created
+basically because it's written mostly in Python.
 
 *Some notes:*
-- The creation of tags(basically linking notes between each other using ctags) you need to add them manually to the
-  second line of each note, I haven't found a way of automating this as of right now.
-- I think this cli only works in Linux and Neovim.
-- I'm very open to PR or suggestions
-- There's a todo list at the end of the file with things that I need to add
+- The creation of tags (basically linking notes between each other using ctags) you need
+  to add them manually to the second line of each note, I haven't found a way of
+  automating this as of right now.
+- I think this cli only works in Linux and for terminal based editors like Vim or Neovim.
+- I'm very open to PR or suggestions.
+- There's a todo list at the end of the file with things that I need to add.
 
-## How to install
-*Check the dependencies below first*
-
-### Install requirements for the program
+# How to install
+You need to put ~/.local/bin in the $PATH of your default shell, so put this line in your
+.zshrc or .bashrc and reboot
 ```bash
-pip install -r requirements.txt
+export PATH=$PATH:/home/$USER/.local/bin
 ```
-This will install all the modules that my program uses.
-
-Now move to the repo, and then follow this steps:
-
-You can either use the repo as the install directory and use git pull to update
+Then make sure to move inside this repo and run
 ```bash
-pip install -e .
+./install.sh
 ```
+Note: *Don't move the repo because the launcher will not be able to find the virtual
+environment*
 
-Or install it locally in your machine
+# How to uninstall
+To uninstall you need to delete the repo, the launcher, and the config file
 ```bash
-pip install .
-pip install --upgrade . # To update the program from the repo
+rm ~/path/to/repo/Zettelpy
+rm ~/.config/zettelpyrc.ini
+rm ~/.local/bin
 ```
 
 You already have everything related to python installed, now you need to run the
@@ -42,7 +38,7 @@ can modify it
 zettelpy # This will quit the program inmediately, read what it says
 ```
 
-### This creates a config file
+## The config file
 So basically you now have a file to configure the program, most of us will have
 it in ~/.config/zettelpyrc.ini after this you need to go to the needed
 directory inside this projects repo and copy _.ctags.d_ and _.rgignore_ to the
@@ -55,13 +51,14 @@ cp -r .ctags.d .rgignore ~/root/of/notes/directory
 And now everything **should** work.
 
 ## Dependencies
-- Python 3.4 or later, there's some function that I think are not present on versions below 3.4
-- For identifying the Luhmann-ID I'm using ctags, it works well with Neovim
-- Ripgrep, to search for the ID from outside
-- Some program to view the notes, see the config file, by default I choosed
-  okular beacuse it's what I use
+- Python 3.6 or later, there's some function that I think are not present on versions
+  below 3.4.
+- For identifying the Luhmann-ID I'm using ctags, it works well with Neovim.
+- Ripgrep, to search for the ID from outside.
+- Some program to view the notes, see the config file, by default I choosed okular beacuse
+  it's what I use.
 
-# Usage:
+## Usage:
 ### Fleeting notes
 The everyday notes you take them with this mode. As you can see, you can't have
 a note called Fleeting on the root directory of the notes.
@@ -126,16 +123,11 @@ to the file
 ```bash
 zettelpy -i
 ```
-Note about this flag: *If you pass this flag it will ignore everything else,
-it's just for cleaning the directory of empty files refreshing ctags and
-showing you the index*
+Note about this flag: *If you give this flag it will show you the index of notes, and it
+the background it will clean empty files and refresh ctags, everything that comes after
+the -i flag will be ignored*
 
-# The project is a mess
-Yes, it's a mess, I don't even know what I'm trying to accomplish in here, this
-is going to be another one of those projects. Just don't use it because there's
-a lot of things that I'm not providing to make it work correctly and safely.
-
-# Things that I need to add
+#### Things that I need to add
 There's a bunch of them, honestly I only made this program to see if I liked
 Python, I will add them while I'm learning about it.
 
@@ -143,4 +135,10 @@ I will list them in here:
 - Add a warning and create a note with that tag instead of throwing an
   error when introducing a non existing ID
 - Automatic tag generation and insertion
+- Use a database to store the notes
 - Define dependencies for python
+
+#### The project is a mess
+Yes, it's a mess, I don't even know what I'm trying to accomplish in here, this
+is going to be another one of those projects. Just don't use it because there's
+a lot of things that I'm not providing to make it work correctly and safely.

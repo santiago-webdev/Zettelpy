@@ -1,12 +1,10 @@
 import os
 import argparse
-import subprocess
 from configparser import ConfigParser
 from pathlib import Path  # Manage paths
 
 
 def cli() -> argparse.Namespace:  # Parse the arguments
-
     parser = argparse.ArgumentParser(prog='zettelpy',
         description='Personal Knowledge System based on Zettelkasten')
 
@@ -23,7 +21,6 @@ def cli() -> argparse.Namespace:  # Parse the arguments
 
 
 def cli_config():  # Parse the user configurations, or use defaults
-
     CONFIG_LOCATE = (os.environ['XDG_CONFIG_HOME'] + '/zettelpyrc.ini')
 
     if not os.path.exists(CONFIG_LOCATE):  # Check if config file exists

@@ -35,7 +35,6 @@ def check_extension(to_check: Path):
 
 
 def retrieve_path(dest: Path):
-
     dest_path = str(dest)  # I'm casting a Path to a string
 
     if dest_path == 'lastOpenedNote':  # lastOpenedNote
