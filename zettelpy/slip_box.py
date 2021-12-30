@@ -44,9 +44,9 @@ class Zettel:  # Create a defined type of note based on the type of argument giv
         finally:
             if not zettel_dest.exists():
                 with open(zettel_dest, 'w') as destNote:
-                    title_note = ('# ' +
-                            os.path.splitext(os.path.basename(str(zettel_dest)))[0]+'' +
-                            '\n## @\n\n\n')  # Generate the template
+                    title_note = (
+                        '# ' + os.path.splitext(os.path.basename(str(zettel_dest)))[0] + '' + '\n## @\n\n\n'
+                    )  # Generate the template
                     destNote.write(title_note)  # And insert it
             subprocess.run([NOTES_EDITOR, zettel_dest])  # Open the note
             last_opened_note(zettel_dest)

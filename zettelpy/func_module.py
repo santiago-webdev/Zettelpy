@@ -5,7 +5,7 @@ from typing import Optional
 
 
 def index_notes(NOTES_DIRECTORY, NOTES_EDITOR, index=False):
-    index_path = (NOTES_DIRECTORY + '/Notes/index.md')
+    index_path = NOTES_DIRECTORY + '/Notes/index.md'
     if index is True:  # Redoes the index and clean empty files
         subprocess.call(['find', '.', '-empty', '-type', 'f', '-delete'])  # Deletes the empty files
         with open(index_path, 'w') as f:
@@ -16,13 +16,13 @@ def index_notes(NOTES_DIRECTORY, NOTES_EDITOR, index=False):
 
 
 def last_opened_note(mode: Optional[Path]):
-    if mode == None:
-        with open('lastOpenedNote', 'r') as l:  # Read mode
-            return l.read().rstrip('\n')
+    if mode is None:
+        with open('lastOpenedNote', 'r') as lastNote:  # Read mode
+            return lastNote.read().rstrip('\n')
     else:
         if mode.is_file():  # Check if note exists, and then writes
-            with open('lastOpenedNote', 'w') as l:  # Write mode
-                l.write(str(mode))
+            with open('lastOpenedNote', 'w') as lastNote:  # Write mode
+                lastNote.write(str(mode))
         else:
             raise Exception('Can\'t write to file')
 
@@ -48,12 +48,9 @@ def retrieve_path(dest: Path):
             exit(1)
 
     elif dest_path == 'Fleeting':  # Fleeting notes
-        todays_note = Path('Notes/Fleeting/note-' +
-            datetime.date.today().strftime("%Y-%m-%d") + '.md')
-        todays_title = ('# Notes for ' +
-            datetime.date.today().strftime("%b %d, %Y") + '\n')
-        hours_title = ('\n# At ' +
-            str(datetime.datetime.now().strftime("%H:%M")))
+        todays_note = Path('Notes/Fleeting/note-' + datetime.date.today().strftime("%Y-%m-%d") + '.md')
+        todays_title = '# Notes for ' + datetime.date.today().strftime("%b %d, %Y") + '\n'
+        hours_title = '\n# At ' + str(datetime.datetime.now().strftime("%H:%M"))
 
         if not todays_note.is_file():  # If the note doesn't exists, create it
             with open(todays_note, 'w+') as f:
