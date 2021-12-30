@@ -4,18 +4,18 @@ from pathlib import Path  # Manage paths
 from .func_module import last_opened_note  # To write to lastOpenedNote
 
 
-class SlipBox:  # Create or check the directories
+class SlipBox:  # Check or create the directory
     def __init__(self, directory):
         self.directory = directory
 
     def initialize_box(self):
-        try:  # Check and create base directories
-            NOTES_PATH = Path(self.directory + '/Notes/Fleeting')
+        try:
+            NOTES_PATH = Path(self.directory)
             if not NOTES_PATH.is_dir():
                 NOTES_PATH.mkdir(parents=True, exist_ok=True)
-            os.chdir(self.directory)  # Change to the directory of the notes
-        except Exception as d:
-            print(d)
+            os.chdir(self.directory)  # Change to the directory of the notes, this is necessary for it
+        except Exception as directory:
+            print(directory)  # There was an error creating the directory
             exit(1)
 
 
