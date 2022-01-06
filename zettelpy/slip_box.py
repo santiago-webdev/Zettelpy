@@ -1,52 +1,38 @@
-import subprocess
 import os
 from pathlib import Path  # Manage paths
-from .func_module import last_opened_note  # To write to lastOpenedNote
 
 
-class SlipBox:  # Check or create the directory
+class SlipBox:
+    """This class will instantiate an object that can check or create the directory, and the database for the notes"""
+
     def __init__(self, directory):
         self.directory = directory
 
-    def initialize_box(self):
+    def slipbox_init(self):
+        """In this method if the directory or the database under the given path does not exist then create it"""
+
+        NOTES_PATH = Path(self.directory)
         try:
-            NOTES_PATH = Path(self.directory)
+            # Base directory
             if not NOTES_PATH.is_dir():
                 NOTES_PATH.mkdir(parents=True, exist_ok=True)
-            os.chdir(self.directory)  # Change to the directory of the notes, this is necessary for it
-        except Exception as directory:
-            print(directory)  # There was an error creating the directory
-            exit(1)
-
-
-class Zettel:  # Create a defined type of note based on the type of argument given
-    def __init__(self, dest, view=False):
-        self.dest = dest
-        self.view = view
-
-    def create_zettel(self, NOTES_VIEW, NOTES_EDITOR):
-        zettel_dest = Path(self.dest)  # I use this variable as a mind helper, to know what I'm working with
-
-        if self.view:
-            if zettel_dest.is_file():
-                subprocess.Popen([NOTES_VIEW, zettel_dest])
-                exit(0)
-            else:
-                print('The note that you are trying to view doesn\'t exists')
-                exit(1)
-
-        try:
-            if not zettel_dest.exists():
-                os.makedirs(zettel_dest.parent, exist_ok=True)
-        except Exception as f:
-            print(f)
+        except Exception as OSError:
+            print(OSError)
             exit(1)
         finally:
-            if not zettel_dest.exists():
-                with open(zettel_dest, 'w') as destNote:
-                    title_note = (
-                        '# ' + os.path.splitext(os.path.basename(str(zettel_dest)))[0] + '' + '\n## @\n\n\n'
-                    )  # Generate the template
-                    destNote.write(title_note)  # And insert it
-            subprocess.run([NOTES_EDITOR, zettel_dest])  # Open the note
-            last_opened_note(zettel_dest)
+            os.chdir(NOTES_PATH)  # Change to the directory that will contain the notes
+
+
+class DatabaseManage(SlipBox):
+    """This class is a child of SlipBox, and it will create and manage the SQLite3 database"""
+
+    def database_init(self):
+        """Check if the database exists, if not then create it"""
+
+        DB_PATH = Path(self.directory + '/slip_box.db')
+        try:
+            if not DB_PATH.is_file():
+                DB_PATH.touch()
+        except Exception as OSError:
+            print(OSError)
+            exit(1)

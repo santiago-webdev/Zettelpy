@@ -4,3 +4,4 @@ zettelpy.egg-info
 __pycache__/
 zet_user
 .zetenv
+.devenv
