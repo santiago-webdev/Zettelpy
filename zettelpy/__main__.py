@@ -1,6 +1,6 @@
 import argparse
 from os import getenv
-from .slip_box import DatabaseManage
+from .slip_box import DatabaseManage, FleetingZettel
 
 
 def cli() -> argparse.Namespace:
@@ -19,6 +19,8 @@ def main():
     checks_slip_box.slipbox_init()
     checks_slip_box.database_init()
 
+    test_creation_of_note = FleetingZettel
+    test_creation_of_note.create_temp_note()
     # # Receive input from standard input
     # if not sys.stdin.isatty():
     #     data = sys.stdin.read()
