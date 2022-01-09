@@ -1,11 +1,11 @@
 import os
 import subprocess
 from pathlib import Path
-from zettelpy.helper_module import get_date_as_path, receive_from_stdin, temp_note_template
+from zettelpy import helper_module
 
 
 class SlipBox:
-    """This class will instantiate an object that can check or create the directory, and the database for the notes"""
+    """Instantiate an object that can create the directory"""
 
     def __init__(self, directory):
         self.directory = directory
@@ -56,11 +56,11 @@ class FleetingZettel:
     """
 
     def create_temp_note():
-        TEMP_NOTE_PATH: Path = get_date_as_path()
+        TEMP_NOTE_PATH: Path = helper_module.get_date_as_path()
         if not TEMP_NOTE_PATH.exists():
             with open(TEMP_NOTE_PATH, 'w') as tempNote:
-                tempNote.write(temp_note_template(0))
+                tempNote.write(helper_module.temp_note_template(0))
         with open(TEMP_NOTE_PATH, 'a') as tempNote:
-            tempNote.write(temp_note_template(1))  # Insert time
-            tempNote.write(receive_from_stdin())  # Insert contents given through stdin
+            tempNote.write(helper_module.temp_note_template(1))  # Insert time
+            tempNote.write(helper_module.receive_from_stdin())  # Insert contents given through stdin
         subprocess.call(['nvim', '-c norm Go', TEMP_NOTE_PATH])
