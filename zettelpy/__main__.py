@@ -19,12 +19,8 @@ def main():
     checks_slip_box.slipbox_init()
     checks_slip_box.database_init()
 
-    test_creation_of_note = FleetingZettel
-    test_creation_of_note.create_temp_note()
-    # # Receive input from standard input
-    # if not sys.stdin.isatty():
-    #     data = sys.stdin.read()
-    #     print(data.strip())
+    temp_note_spawn = FleetingZettel
+    temp_note_spawn.create_temp_note()
 
 
 if __name__ == '__main__':

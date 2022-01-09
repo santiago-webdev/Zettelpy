@@ -1,6 +1,7 @@
 import os
+import subprocess
 from pathlib import Path
-from zettelpy.helper_module import get_date_as_path, temp_note_template
+from zettelpy.helper_module import get_date_as_path, receive_from_stdin, temp_note_template
 
 
 class SlipBox:
@@ -60,4 +61,6 @@ class FleetingZettel:
             with open(TEMP_NOTE_PATH, 'w') as tempNote:
                 tempNote.write(temp_note_template(0))
         with open(TEMP_NOTE_PATH, 'a') as tempNote:
-            tempNote.write(temp_note_template(1))
+            tempNote.write(temp_note_template(1))  # Insert time
+            tempNote.write(receive_from_stdin())  # Insert contents given through stdin
+        subprocess.call(['nvim', '-c norm Go', TEMP_NOTE_PATH])
