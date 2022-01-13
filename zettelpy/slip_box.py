@@ -1,66 +1,93 @@
 import os
-import subprocess
 from pathlib import Path
 from zettelpy import helper_module
 
 
 class SlipBox:
-    """Instantiate an object that can create the directory"""
+    """Instantiate an object that can create the directory hierarchy"""
 
-    def __init__(self, directory):
-        self.directory = directory
+    def __init__(self, directory: str) -> None:
+        self.dir: Path = Path(directory)  # We put all our files in here
+        self.dir_fleeting: Path = Path(self.dir, 'fleeting')  # Temp notes go here
+        self.dir_last_note: Path = Path(self.dir, 'last_note')  # Temp notes go here
 
     def slipbox_init(self):
-        """In this method if the directory or the database under the given path does not exist then create it"""
+        """If the directory or the database under the given path doesn't exist then create it"""
 
-        NOTES_PATH: Path = Path(self.directory)
-        NOTES_PATH_FLEETING: Path = Path(self.directory, 'fleeting')
         try:
-            if not NOTES_PATH.is_dir():
-                NOTES_PATH.mkdir(parents=True, exist_ok=True)
-            if not NOTES_PATH_FLEETING.is_dir():
-                NOTES_PATH_FLEETING.mkdir(parents=True, exist_ok=True)
+            # Create the main directory
+            if not self.dir.is_dir():
+                self.dir.mkdir(parents=True, exist_ok=True)
+
+            # Create the fleeting notes directory
+            if not self.dir_fleeting.is_dir():
+                self.dir_fleeting.mkdir(parents=True, exist_ok=True)
+
+            # Create the file were we store the path to the last accessed note
+            if not self.dir_last_note.is_file():
+                self.dir_last_note.touch()
         except Exception as OSError:
             print(OSError)
             exit(1)
         else:
-            os.chdir(NOTES_PATH)  # Change to the directory that will contain the notes
-            return NOTES_PATH
+            os.chdir(self.dir)  # Change to the directory that will contain the notes
+            return self.dir
 
 
 class DatabaseManage(SlipBox):
-    """This class is a child of SlipBox, and it will create and manage the SQLite3 database"""
+    """Returns the path to the database"""
+    def __init__(self, directory: Path) -> None:
+        super().__init__(directory)
+        self.db_path: Path = Path(directory, 'slip_box.db')  # This is the database
 
     def database_init(self):
         """Check if the database exists, if not then create it"""
 
-        DB_PATH = Path(self.directory + '/slip_box.db')
         try:
-            if not DB_PATH.is_file():
-                DB_PATH.touch()
+            # Create the database
+            if not self.db_path.is_file():
+                self.db_path.touch()
         except Exception as OSError:
             print(OSError)
             exit(1)
+        else:
+            os.chdir(self.dir)
+            return self.db_path
 
 
-class FleetingZettel:
-    """
-    This class will be in charge of creating and managing the
-    temporary(fleeting) notes:
-        The title for each note will be based on this format: YYYYMMDDhhmm, for
-        example 202212312359.md, this title will be generated from a function on
-        the helpers_module and all of this notes will be saved under fleeting/
-        under the default directory set by the environment variable
-        ZETTELPY_DIR, this notes will not be stored on the database, and "title"
-        will be the path to the note that is created each day.
-    """
+# class DatabaseManage(SlipBox):
+#     """Returns the path to the database"""
+#     def __init__(self, dir_db: Path) -> None:
+#         self.dir_db: Path = dir_db  # Dir in which the database is stored into
+#         self.db_path: Path = Path(dir_db, 'slip_box.db')  # This is the database
 
-    def create_temp_note():
-        TEMP_NOTE_PATH: Path = helper_module.get_date_as_path()
-        if not TEMP_NOTE_PATH.exists():
-            with open(TEMP_NOTE_PATH, 'w') as tempNote:
-                tempNote.write(helper_module.temp_note_template(0))
-        with open(TEMP_NOTE_PATH, 'a') as tempNote:
-            tempNote.write(helper_module.temp_note_template(1))  # Insert time
-            tempNote.write(helper_module.receive_from_stdin())  # Insert contents given through stdin
-        subprocess.call(['nvim', '-c norm Go', TEMP_NOTE_PATH])
+#     def database_init(self):
+#         """Check if the database exists, if not then create it"""
+
+#         try:
+#             # Create the database
+#             if not self.db_path.is_file():
+#                 self.db_path.touch()
+#         except Exception as OSError:
+#             print(OSError)
+#             exit(1)
+#         else:
+#             os.chdir(self.dir_db)
+#             return self.db_path
+
+
+# class FleetingZettel:
+#     pass
+
+
+# class Zettel:
+#     """This class will be in charge of creating and managing the temporary(fleeting) notes"""
+
+#     def __init__(self, path: Path) -> None:
+#         self.path: Path = path
+
+#     def modf_temp_note(self):
+#         TEMP_NOTE_PATH: Path = helper_module.get_date_as_path()
+#         TEMP_NOTE_PATH.touch()  # Create the file
+#         helper_module.last_accessed_note(False, self.path)
+#         return TEMP_NOTE_PATH

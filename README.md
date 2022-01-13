@@ -10,7 +10,7 @@ basically because it's written mostly in Python.
 - I'm very open to PR or suggestions.
 - There's a todo list at the end of the file with things that I need to add.
 
-# How to install
+## How to install
 You need to put ~/.local/bin in the $PATH of your default shell, so put this line in your
 .zshrc or .bashrc and reboot
 ```bash
@@ -23,7 +23,7 @@ Then make sure to move inside this repo and run
 Note: *Don't move the repo because the launcher will not be able to find the virtual
 environment*
 
-# How to uninstall
+## How to uninstall
 To uninstall you need to delete the repo, the launcher, and the config file
 ```bash
 rm ~/path/to/repo/Zettelpy
