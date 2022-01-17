@@ -35,8 +35,6 @@ class SlipBox:
 
 
 class DatabaseManage(SlipBox):
-    """Returns the path to the database"""
-
     def __init__(self, directory: Path) -> None:
         super().__init__(directory)
         self.db_path: Path = Path(directory, 'slip_box.db')  # This is the database
@@ -57,16 +55,11 @@ class DatabaseManage(SlipBox):
 
 
 class Zettel(SlipBox):
-    """Create a fleeting note or edit an existing one"""
-
     def __init__(self, directory: Path) -> None:
         super().__init__(directory)
 
-    def modf_temp_note(self):
+    def modf_temp_note(self) -> Path:
         NOTE_PATH: Path = helper_module.get_date_as_path(self.dir_fleeting)  # Get path
-        # TODO: create helper function to call the editor via a function, plus make the
-        # next if statement return the path of the file so that on the __main__ we can
-        # call the editor at the end of the __main__ file.
         if not NOTE_PATH.is_file():  # If the file doesn't exists
             NOTE_PATH.touch()  # Create the file
             helper_module.template_do('title fleeting', NOTE_PATH)  # Insert a title

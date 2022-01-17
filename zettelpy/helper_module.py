@@ -1,5 +1,4 @@
 import subprocess
-import shutil
 from datetime import datetime
 from os import getenv
 from pathlib import Path
@@ -57,10 +56,16 @@ def first_actions(flag_last: bool, main_arg: Optional[str] = None) -> str or Non
 
 def template_do(request: str, NOTE_PATH: Path):
     if request == 'title fleeting':
-        TITLE_TEMPLATE = Path(__file__).parent / 'templates' / 'title_header.md'
-        return shutil.copyfile(TITLE_TEMPLATE, NOTE_PATH)
+        NEW_TITLE = '# Notes for today ' + str(
+            datetime.today().strftime('%d of %B, %Y') + '\n'
+        )
+        with open(NOTE_PATH, 'w') as title_note:
+            title_note.write(NEW_TITLE)
+        template_do('new insertion', NOTE_PATH)
     elif request == 'new insertion':
-        NEW_INSERTION = '\n# At ' + str(datetime.today().strftime('%H:%M:%S') + '\n\n')
+        NEW_INSERTION = '\n## At ' + str(
+            datetime.today().strftime('%H:%M:%S') + '\n' + '###\n\n'
+        )
         with open(NOTE_PATH, 'a') as fleeting_note:  # Write mode
             return fleeting_note.write(NEW_INSERTION)
     else:

@@ -23,6 +23,8 @@ def cli() -> argparse.Namespace:
         action='store_true',
         help='Open the last permanent note that you have accessed',
     )
+    # TODO: check for the --path flag, and instead of calling open_note, just call the
+    # function to return the path
     # parser.add_argument(
     #     '-p', '--path', action='store_true', help='Shows real path of the note'
     # )

@@ -5,3 +5,4 @@ __pycache__/
 zet_user
 .zetenv
 .devenv
+zettelpy/unused_code.py
