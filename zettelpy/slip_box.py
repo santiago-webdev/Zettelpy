@@ -12,7 +12,7 @@ class SlipBox:
         self.dir_last_note: Path = Path(self.dir, 'last_note')  # Temp notes go here
 
     def slipbox_init(self):
-        """If the directory or the database under the given path doesn't exist then create it"""
+        """If the dir or the DB under the given path doesn't exist create it"""
 
         try:
             # Create the main directory
@@ -36,6 +36,7 @@ class SlipBox:
 
 class DatabaseManage(SlipBox):
     """Returns the path to the database"""
+
     def __init__(self, directory: Path) -> None:
         super().__init__(directory)
         self.db_path: Path = Path(directory, 'slip_box.db')  # This is the database
@@ -55,39 +56,21 @@ class DatabaseManage(SlipBox):
             return self.db_path
 
 
-# class DatabaseManage(SlipBox):
-#     """Returns the path to the database"""
-#     def __init__(self, dir_db: Path) -> None:
-#         self.dir_db: Path = dir_db  # Dir in which the database is stored into
-#         self.db_path: Path = Path(dir_db, 'slip_box.db')  # This is the database
+class FleetingZettel(SlipBox):
+    """Create a fleeting note or edit an existing one"""
 
-#     def database_init(self):
-#         """Check if the database exists, if not then create it"""
+    def __init__(self, directory: Path) -> None:
+        super().__init__(directory)
 
-#         try:
-#             # Create the database
-#             if not self.db_path.is_file():
-#                 self.db_path.touch()
-#         except Exception as OSError:
-#             print(OSError)
-#             exit(1)
-#         else:
-#             os.chdir(self.dir_db)
-#             return self.db_path
+    def modf_temp_note(self):
+        NOTE_PATH: Path = helper_module.get_date_as_path(self.dir_fleeting)  # Get path
+        # TODO: create helper function to call the editor via a function, plus make the
+        # next if statement return the path of the file so that on the __main__ we can
+        # call the editor at the end of the __main__ file.
+        if not NOTE_PATH.is_file():  # If the file doesn't exists
+            NOTE_PATH.touch()  # Create the file
+            helper_module.template_do('title fleeting', NOTE_PATH)  # Insert a title
+        else:
+            helper_module.template_do('new insertion', NOTE_PATH)  # Insert subheader
 
-
-# class FleetingZettel:
-#     pass
-
-
-# class Zettel:
-#     """This class will be in charge of creating and managing the temporary(fleeting) notes"""
-
-#     def __init__(self, path: Path) -> None:
-#         self.path: Path = path
-
-#     def modf_temp_note(self):
-#         TEMP_NOTE_PATH: Path = helper_module.get_date_as_path()
-#         TEMP_NOTE_PATH.touch()  # Create the file
-#         helper_module.last_accessed_note(False, self.path)
-#         return TEMP_NOTE_PATH
+        helper_module.open_note(NOTE_PATH)  # Open with editor
