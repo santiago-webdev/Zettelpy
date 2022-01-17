@@ -56,7 +56,7 @@ class DatabaseManage(SlipBox):
             return self.db_path
 
 
-class FleetingZettel(SlipBox):
+class Zettel(SlipBox):
     """Create a fleeting note or edit an existing one"""
 
     def __init__(self, directory: Path) -> None:

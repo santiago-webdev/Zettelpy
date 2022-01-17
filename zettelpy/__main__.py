@@ -45,7 +45,7 @@ def main():
 
     if first_actions is None:
         helper_module.open_note(
-            slip_box.FleetingZettel(NOTES_DIR).modf_temp_note()
+            slip_box.Zettel(NOTES_DIR).modf_temp_note()
         )  # modf_temp_note returns a path, and we open it with open_note
     else:
         pass
