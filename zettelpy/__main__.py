@@ -18,12 +18,6 @@ def cli() -> argparse.Namespace:
         help='Provide path or id of the note',
     )
     parser.add_argument(
-        '-f',
-        '--fleeting',
-        action='store_true',
-        help='Create quick/temporary/fleeting notes',
-    )
-    parser.add_argument(
         '-l',
         '--last',
         action='store_true',
@@ -50,7 +44,9 @@ def main():
     first_actions = helper_module.first_actions(user_args.last, user_args.main_argument)
 
     if first_actions is None:
-        slip_box.FleetingZettel(NOTES_DIR).modf_temp_note()
+        helper_module.open_note(
+            slip_box.FleetingZettel(NOTES_DIR).modf_temp_note()
+        )  # modf_temp_note returns a path, and we open it with open_note
     else:
         pass
 

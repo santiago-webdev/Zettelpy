@@ -72,5 +72,4 @@ class FleetingZettel(SlipBox):
             helper_module.template_do('title fleeting', NOTE_PATH)  # Insert a title
         else:
             helper_module.template_do('new insertion', NOTE_PATH)  # Insert subheader
-
-        helper_module.open_note(NOTE_PATH)  # Open with editor
+        return NOTE_PATH
