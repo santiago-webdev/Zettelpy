@@ -87,8 +87,12 @@ disown
 ```
 
 ## TODO
-1. Make the program work with IDs and even when the notes are in subdirectories
+1. First query the database for the path, if it doesn't find anything, create the note on the filesystem, for now I'm
+   just storing paths into the DB till I found a way of using the data coming from it.
 2. Find a fast way of searching through the notes
 3. Create tools to fix errors introduced into the database
 4. Being able to delete notes with a flag -d
 5. Replace info automatically from the templates
+6. Add a function/flag/way of checking the notes, to refresh the database
+7. Make the program work with IDs and even when the notes are in subdirectories
+8. A way of dealing with extensions
