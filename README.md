@@ -68,8 +68,8 @@ quit the file
 ### How do you link the notes?
 By the name of this repo you can tell that this program was made with the intention of
 being used for the zettelkasten method, the first one or two attempts of making this a
-usable tools I used ctags to link each file together, but now I decided to use (this
-language server)[https://github.com/artempyanykh/zeta-note].
+usable tools I used ctags to link each file together, but now I decided to use [this
+language server](https://github.com/artempyanykh/zeta-note).
 
 ## Flags
 
