@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-path_virt_env=
-
-source $path_virt_env
-
-zettelpy "$@"
-
-deactivate
