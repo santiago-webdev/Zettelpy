@@ -48,9 +48,12 @@ def main():
     if first_actions is None:
         helper_module.open_note(
             slip_box.Zettel(NOTES_DIR).modf_temp_note()
-        )  # modf_temp_note returns a path, and we open it with open_note
+        )  # This modf_temp_note returns a path, and we open it with open_note
     else:
         pass
+        # helper_module.open_note(
+        #     slip_box.Zettel(NOTES_DIR).modf_zettel()
+        # )  # The same but for permanent notes
 
 
 if __name__ == '__main__':

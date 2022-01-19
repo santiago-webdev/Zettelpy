@@ -1,4 +1,5 @@
 import os
+import sqlite3
 from pathlib import Path
 from zettelpy import helper_module
 
@@ -40,18 +41,31 @@ class DatabaseManage(SlipBox):
         self.db_path: Path = Path(directory, 'slip_box.db')  # This is the database
 
     def database_init(self):
-        """Check if the database exists, if not then create it"""
+        """Check if the database exists, if not create it and the table"""
 
         try:
-            # Create the database
-            if not self.db_path.is_file():
-                self.db_path.touch()
+            if self.db_path.is_file():
+                return
+
+            self.db_path.touch()  # Create it
+            conn = sqlite3.connect(self.db_path)  # Connect to the database
+            # cursor_db.execute("DROP TABLE IF EXISTS notes")
+            conn.cursor().execute(
+                """
+                CREATE TABLE notes (
+                    note_id         INTEGER PRIMARY KEY AUTOINCREMENT,
+                    luhmann_id      TEXT,
+                    path            TEXT
+                )"""
+            )
+            conn.commit()
+            conn.close()
         except Exception as OSError:
             print(OSError)
             exit(1)
         else:
-            os.chdir(self.dir)
-            return self.db_path
+            os.chdir(self.dir)  # Change to the directory that will contain the notes
+            return True
 
 
 class Zettel(SlipBox):
@@ -66,3 +80,6 @@ class Zettel(SlipBox):
         else:
             helper_module.template_do('new insertion', NOTE_PATH)  # Insert subheader
         return NOTE_PATH
+
+    # def modf_zettel(self) -> Path:
+    #     DatabaseManage(self.dir).table_creation()
