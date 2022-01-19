@@ -36,6 +36,7 @@ class SlipBox:
 
 
 class DatabaseManage(SlipBox):
+    """Manage the SQLite3 database, which will store the paths to each note"""
     def __init__(self, directory: Path) -> None:
         super().__init__(directory)
         self.db_path: Path = Path(directory, 'slip_box.db')  # This is the database
@@ -49,14 +50,12 @@ class DatabaseManage(SlipBox):
 
             self.db_path.touch()  # Create it
             conn = sqlite3.connect(self.db_path)  # Connect to the database
-            # cursor_db.execute("DROP TABLE IF EXISTS notes")
             conn.cursor().execute(
-                """
-                CREATE TABLE notes (
-                    note_id         INTEGER PRIMARY KEY AUTOINCREMENT,
-                    luhmann_id      TEXT,
-                    path            TEXT
-                )"""
+                """ CREATE TABLE notes (
+                    note_id     INTEGER PRIMARY KEY AUTOINCREMENT,
+                    luhmann_id  TEXT NULL,
+                    title       TEXT NULL,
+                    path        TEXT NOT NULL)"""
             )
             conn.commit()
             conn.close()
@@ -69,16 +68,21 @@ class DatabaseManage(SlipBox):
 
 
 class Zettel(SlipBox):
+    """Create notes, either permanent ones, or temporary ones"""
     def __init__(self, directory: Path) -> None:
         super().__init__(directory)
 
     def modf_temp_note(self) -> Path:
-        NOTE_PATH: Path = helper_module.get_date_as_path(self.dir_fleeting)  # Get path
+        NOTE_PATH: Path = helper_module.get_date_as_path(
+            self.dir_fleeting  # Get path as ^^ with the root being self.dir_fleeting
+        )
         if not NOTE_PATH.is_file():  # If the file doesn't exists
             NOTE_PATH.touch()  # Create the file
-            helper_module.template_do('title fleeting', NOTE_PATH)  # Insert a title
+            helper_module.template_do('title fleeting', NOTE_PATH)  # And insert a title
         else:
             helper_module.template_do('new insertion', NOTE_PATH)  # Insert subheader
+
+        helper_module.receive_from_stdin(NOTE_PATH)  # Write anything coming from stdin
         return NOTE_PATH
 
     # def modf_zettel(self) -> Path:

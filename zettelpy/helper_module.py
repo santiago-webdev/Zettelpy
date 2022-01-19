@@ -11,17 +11,14 @@ def get_date_as_path(NOTE_PATH: Path) -> Path:
     return Path(NOTE_PATH, datetime.today().strftime("%Y%m%d") + ".md")
 
 
-def receive_from_stdin() -> str:
+def receive_from_stdin(NOTE_PATH: Path) -> True:
     if stdin.isatty():
-        return ''  # TODO fix this return
+        return False
     else:
-        data = stdin.read()
-        print(data.strip())
-        return data
-    # # Receive input from standard input
-    # if not sys.stdin.isatty():
-    #     data = sys.stdin.read()
-    #     print(data.strip())
+        data = stdin.read()  # Read information comming from standard input
+        with open(NOTE_PATH, 'a') as note_stdin:
+            note_stdin.write(data.strip())  # And write it without withspaces
+        return True
 
 
 def open_note(PATH_TO_NOTE: Path):
