@@ -37,6 +37,7 @@ class SlipBox:
 
 class DatabaseManage(SlipBox):
     """Manage the SQLite3 database, which will store the paths to each note"""
+
     def __init__(self, directory: Path) -> None:
         super().__init__(directory)
         self.db_path: Path = Path(directory, 'slip_box.db')  # This is the database
@@ -69,6 +70,7 @@ class DatabaseManage(SlipBox):
 
 class Zettel(SlipBox):
     """Create notes, either permanent ones, or temporary ones"""
+
     def __init__(self, directory: Path) -> None:
         super().__init__(directory)
 
@@ -85,5 +87,6 @@ class Zettel(SlipBox):
         helper_module.receive_from_stdin(NOTE_PATH)  # Write anything coming from stdin
         return NOTE_PATH
 
-    # def modf_zettel(self) -> Path:
-    #     DatabaseManage(self.dir).table_creation()
+    def modf_zettel(self, TITLE_NOTE: Path) -> Path:
+        print(TITLE_NOTE)
+        pass

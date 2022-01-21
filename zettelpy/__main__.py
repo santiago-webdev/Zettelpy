@@ -1,6 +1,7 @@
 import argparse
 from os import getenv
 from pathlib import Path
+from posixpath import realpath
 from zettelpy import slip_box, helper_module
 
 
@@ -11,9 +12,9 @@ def cli() -> argparse.Namespace:
         description='Personal Knowledge System based on Zettelkasten',
     )
     parser.add_argument(
-        'main_argument',
+        'luhmann_id',
         nargs='?',
-        type=str,
+        type=Path,
         default=None,
         help='Provide path or id of the note',
     )
@@ -23,18 +24,16 @@ def cli() -> argparse.Namespace:
         action='store_true',
         help='Open the last permanent note that you have accessed',
     )
-    # TODO: check for the --path flag, and instead of calling open_note, just call the
-    # function to return the path
-    # parser.add_argument(
-    #     '-p', '--path', action='store_true', help='Shows real path of the note'
-    # )
+    parser.add_argument(
+        '-p', '--path', action='store_true', help='Shows real path of the note'
+    )
     # parser.add_argument('-d', '--delete', action='store_true', help='Delete note')
     return parser.parse_args()
 
 
 def main():
     NOTES_DIR: Path = Path(getenv('ZETTELPY_DIR'))  # Directory used to store the notes
-    user_args = cli()
+    args = cli()
 
     slip_box_spawn = slip_box.SlipBox(NOTES_DIR)  # Instantiate a SlipBox Object
     slip_box_spawn.slipbox_init()  # Create base hierarchy of files
@@ -42,17 +41,24 @@ def main():
     db_spawn = slip_box.DatabaseManage(NOTES_DIR)  # Instantiate a DatabaseManage Object
     db_spawn.database_init()  # Create the database
 
-    # Check for -l flag and main_argument
-    first_actions = helper_module.first_actions(user_args.last, user_args.main_argument)
+    # Check for -l flag and luhmann_id, which is basically a permanent note
+    # TODO, check for --path and don't write to the file, check if the file exists
+    # before
+    args.luhmann_id = helper_module.first_actions(args.last, args.luhmann_id)
 
-    if first_actions is None:
+    # TODO, add comprobation if the file exists before returning a path, create helper
+    # functions to create files
+    if args.path is True:
+        return realpath(args.luhmann_id)
+
+    if args.luhmann_id is None:
         helper_module.open_note(
             slip_box.Zettel(NOTES_DIR).modf_temp_note()
         )  # This modf_temp_note returns a path, and we open it with open_note
     else:
-        pass
+        # pass
         # helper_module.open_note(
-        #     slip_box.Zettel(NOTES_DIR).modf_zettel()
+        slip_box.Zettel(NOTES_DIR).modf_zettel(args.luhmann_id)
         # )  # The same but for permanent notes
 
 

@@ -30,7 +30,17 @@ def open_note(PATH_TO_NOTE: Path):
     return subprocess.run([getenv('EDITOR'), PATH_TO_NOTE])
 
 
-def first_actions(flag_last: bool, main_arg: Optional[str] = None) -> str or None:
+def check_extension(to_check: Path):
+    if to_check.stem == to_check.name:
+        return to_check.with_suffix('.md')
+    else:
+        return to_check
+
+
+# `main_arg` is a default argument because it has a default argument because it has a
+# default value, `flag_last` is a positional argument because it doesn't have a default
+# value, that's why I can't put `flag_last` can't go after `main_arg`
+def first_actions(flag_last: bool, flag_perm: Optional[Path] = None) -> str or None:
     """
     Checks for the -l flag, which stands for last accessed note, do some logic explained
     below, and after this return either a str or None.
@@ -46,11 +56,12 @@ def first_actions(flag_last: bool, main_arg: Optional[str] = None) -> str or Non
     if flag_last is True:
         with open('last_note', 'r') as last_note:  # Read mode
             return last_note.read().rstrip('\n')
-    elif flag_last is False and main_arg is not None:
+    elif flag_last is False and flag_perm is not None:
         with open('last_note', 'w') as last_accessed:  # Write mode
-            last_accessed.write(main_arg)
-            return main_arg
-    elif flag_last is False and main_arg is None:
+            main_arg_check = check_extension(flag_perm)  # Make the Path a .md file
+            last_accessed.write(str(main_arg_check))  # And write the Path to the file
+            return main_arg_check
+    elif flag_last is False and flag_perm is None:
         return None
     else:
         raise TypeError('Something is wrong with the parameters given to this function')
