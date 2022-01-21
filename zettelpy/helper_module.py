@@ -15,10 +15,15 @@ def receive_from_stdin(NOTE_PATH: Path) -> True:
     if stdin.isatty():
         return False
     else:
-        data = stdin.read()  # Read information comming from standard input
-        with open(NOTE_PATH, 'a') as note_stdin:
-            note_stdin.write(data.strip())  # And write it without withspaces
-        return True
+        try:
+            data = stdin.read()  # Read information comming from standard input
+            with open(NOTE_PATH, 'a') as note_stdin:
+                note_stdin.write(data.strip())  # And write it without withspaces
+        except Exception as OSError:
+            print(OSError)
+            exit(1)
+        else:
+            return True
 
 
 def open_note(PATH_TO_NOTE: Path):
