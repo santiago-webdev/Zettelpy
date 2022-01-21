@@ -69,7 +69,9 @@ class DatabaseManage(SlipBox):
 
 
 class Zettel(SlipBox):
-    """Create notes, either permanent ones, or temporary ones"""
+    """
+    Create notes, either permanent ones(modf_zettel), or temporary ones(modf_temp_note)
+    """
 
     def __init__(self, directory: Path) -> None:
         super().__init__(directory)
@@ -78,6 +80,7 @@ class Zettel(SlipBox):
         NOTE_PATH: Path = helper_module.get_date_as_path(
             self.dir_fleeting  # Get path as ^^ with the root being self.dir_fleeting
         )
+
         if not NOTE_PATH.is_file():  # If the file doesn't exists
             NOTE_PATH.touch()  # Create the file
             helper_module.template_do('title fleeting', NOTE_PATH)  # And insert a title
@@ -87,6 +90,11 @@ class Zettel(SlipBox):
         helper_module.receive_from_stdin(NOTE_PATH)  # Write anything coming from stdin
         return NOTE_PATH
 
-    def modf_zettel(self, TITLE_NOTE: Path) -> Path:
-        print(TITLE_NOTE)
-        pass
+    def modf_zettel(self, title_zettel: Path) -> Path:
+        if not title_zettel.is_file():  # If the file doesn't exists
+            title_zettel.touch()  # Create the file
+            helper_module.template_do(
+                'title zettel', title_zettel
+            )  # And insert a title
+
+        return title_zettel

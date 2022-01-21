@@ -41,20 +41,21 @@ def main():
     db_spawn = slip_box.DatabaseManage(NOTES_DIR)  # Instantiate a DatabaseManage Object
     db_spawn.database_init()  # Create the database
 
-    args.luhmann_id = helper_module.first_actions(args.last, args.luhmann_id)
+    args.luhmann_id = Path(helper_module.first_actions(args.last, args.luhmann_id))
 
     if args.path is True and args.luhmann_id is not None:
-        return realpath(args.luhmann_id)
+        return realpath(
+            args.luhmann_id
+        )  # If the -p flag is present and the luhmann_id is present just print the path
 
     if args.luhmann_id is None:
         helper_module.open_note(
             slip_box.Zettel(NOTES_DIR).modf_temp_note()
         )  # This modf_temp_note returns a path, and we open it with open_note
     else:
-        # pass
-        # helper_module.open_note(
-        slip_box.Zettel(NOTES_DIR).modf_zettel(args.luhmann_id)
-        # )  # The same but for permanent notes
+        helper_module.open_note(
+            slip_box.Zettel(NOTES_DIR).modf_zettel(args.luhmann_id)
+        )  # The same but for permanent notes
 
 
 if __name__ == '__main__':

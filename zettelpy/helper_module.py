@@ -1,3 +1,4 @@
+import shutil
 import subprocess
 from datetime import datetime
 from os import getenv
@@ -81,5 +82,10 @@ def template_do(request: str, NOTE_PATH: Path):
         )
         with open(NOTE_PATH, 'a') as fleeting_note:  # Write mode
             return fleeting_note.write(NEW_INSERTION)
+    elif request == 'title zettel':
+        # TODO replace text in the file after doing the copy of the file
+        NEW_ZETTEL = Path(__file__).parent / 'templates' / 'title_header.md'
+        shutil.copyfile(NEW_ZETTEL, NOTE_PATH)
+        return NOTE_PATH
     else:
         raise TypeError('The given parameter doesn\'t correspond to any template')
