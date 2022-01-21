@@ -41,14 +41,9 @@ def main():
     db_spawn = slip_box.DatabaseManage(NOTES_DIR)  # Instantiate a DatabaseManage Object
     db_spawn.database_init()  # Create the database
 
-    # Check for -l flag and luhmann_id, which is basically a permanent note
-    # TODO, check for --path and don't write to the file, check if the file exists
-    # before
     args.luhmann_id = helper_module.first_actions(args.last, args.luhmann_id)
 
-    # TODO, add comprobation if the file exists before returning a path, create helper
-    # functions to create files
-    if args.path is True:
+    if args.path is True and args.luhmann_id is not None:
         return realpath(args.luhmann_id)
 
     if args.luhmann_id is None:
