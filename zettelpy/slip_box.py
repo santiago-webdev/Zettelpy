@@ -83,7 +83,7 @@ class Zettel(SlipBox):
 
         if not NOTE_PATH.is_file():  # If the file doesn't exists
             NOTE_PATH.touch()  # Create the file
-            helper_module.template_do('title fleeting', NOTE_PATH)  # And insert a title
+            helper_module.template_do('title fleeting', NOTE_PATH)  # And insert title
         else:
             helper_module.template_do('new insertion', NOTE_PATH)  # Insert subheader
 
@@ -93,8 +93,9 @@ class Zettel(SlipBox):
     def modf_zettel(self, title_zettel: Path) -> Path:
         if not title_zettel.is_file():  # If the file doesn't exists
             title_zettel.touch()  # Create the file
-            helper_module.template_do(
-                'title zettel', title_zettel
-            )  # And insert a title
+            # TODO, insert path to the database
+            helper_module.template_do('title zettel', title_zettel)  # And insert title
+
+        helper_module.receive_from_stdin(title_zettel)
 
         return title_zettel

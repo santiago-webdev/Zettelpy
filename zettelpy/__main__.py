@@ -43,10 +43,12 @@ def main():
 
     args.luhmann_id = Path(helper_module.first_actions(args.last, args.luhmann_id))
 
+    # If the flag -p and luhmann_id are present return a path
     if args.path is True and args.luhmann_id is not None:
-        return realpath(
-            args.luhmann_id
-        )  # If the -p flag is present and the luhmann_id is present just print the path
+        if not args.luhmann_id.is_file():  # But only if that file exists
+            return print('The file doesn\'t exists')
+
+        return realpath(args.luhmann_id)
 
     if args.luhmann_id is None:
         helper_module.open_note(
