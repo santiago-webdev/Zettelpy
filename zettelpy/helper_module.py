@@ -20,6 +20,9 @@ def receive_from_stdin(NOTE_PATH: Path) -> True:
             data = stdin.read()  # Read information comming from standard input
             with open(NOTE_PATH, 'a') as note_stdin:
                 note_stdin.write(data.strip())  # And write it without withspaces
+        # TODO, change the exception like so
+        # `raise SystemExit("Something has gone terribly wrong")`
+        # or use `sys.exit()`
         except Exception as OSError:
             print(OSError)
             exit(1)
@@ -38,9 +41,6 @@ def check_extension(to_check: Path):
         return to_check
 
 
-# `main_arg` is a default argument because it has a default argument because it has a
-# default value, `flag_last` is a positional argument because it doesn't have a default
-# value, that's why I can't put `flag_last` can't go after `main_arg`
 def first_actions(flag_last: bool, flag_perm: Optional[Path] = None) -> str or None:
     """
     Checks for the -l flag, which stands for last accessed note, do some logic explained

@@ -54,8 +54,7 @@ class DatabaseManage(SlipBox):
             conn.cursor().execute(
                 """ CREATE TABLE notes (
                     note_id     INTEGER PRIMARY KEY AUTOINCREMENT,
-                    luhmann_id  TEXT NULL,
-                    title       TEXT NULL,
+                    title       TEXT NOT NULL,
                     path        TEXT NOT NULL)"""
             )
             conn.commit()
@@ -67,6 +66,10 @@ class DatabaseManage(SlipBox):
             os.chdir(self.dir)  # Change to the directory that will contain the notes
             return True
 
+    def insert_note(self, REAL_PATH: Path) -> Path:
+        # TODO Insert realpath into the database
+        pass
+
 
 class Zettel(SlipBox):
     """
@@ -77,7 +80,7 @@ class Zettel(SlipBox):
         super().__init__(directory)
 
     def modf_temp_note(self) -> Path:
-        NOTE_PATH: Path = helper_module.get_date_as_path(
+        NOTE_PATH = helper_module.get_date_as_path(
             self.dir_fleeting  # Get path as ^^ with the root being self.dir_fleeting
         )
 
