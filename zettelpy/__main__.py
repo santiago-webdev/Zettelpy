@@ -45,7 +45,15 @@ def main():
     db_spawn = slip_box.DatabaseManage(NOTES_DIR)  # Instantiate a DatabaseManage Object
     db_spawn.database_init()  # Create the database
 
-    user_args.title = Path(helper_module.first_actions(user_args.last, user_args.title))
+    check_first_actions = helper_module.first_actions(user_args.last, user_args.title)
+    # If ^^ is a None we reassign it to user_args.title, if it contains some sort of
+    # string we cast it to be a path
+    if check_first_actions is not None:
+        user_args.title = Path(
+            helper_module.first_actions(user_args.last, user_args.title)
+        )
+    else:
+        user_args.title = check_first_actions
 
     # If the flag -p and title are present return a path through standard output
     if user_args.path is True and user_args.title is not None:
