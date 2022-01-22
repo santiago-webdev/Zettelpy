@@ -29,7 +29,9 @@ def cli() -> argparse.Namespace:
     parser.add_argument(
         '-p', '--path', action='store_true', help='Shows real path of the note'
     )
-    # parser.add_argument('-d', '--delete', action='store_true', help='Delete note')
+    # parser.add_argument(
+    #     '-d', '--delete', action='store_true', help='Delete the note by title'
+    # )
     return parser.parse_args()
 
 
@@ -74,8 +76,11 @@ def main():
         # and this should work with the -d flag, which is not implemented right now.
         if os.stat(user_args.title).st_size == 0:
             os.remove(user_args.title)
+            # db_spawn.delete_from_table(user_args.title)
+            # TODO if the note that we closed with our EDITOR is empty, delete the note
+            # and also delete the entry on the database
         else:
-            print(realpath(user_args.title))
+            db_spawn.insert_note(str(user_args.title), realpath(user_args.title))
 
 
 if __name__ == '__main__':

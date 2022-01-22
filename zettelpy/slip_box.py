@@ -58,16 +58,32 @@ class DatabaseManage(SlipBox):
                     path        TEXT NOT NULL)"""
             )
             conn.commit()
-            conn.close()
         except Exception as OSError:
             print(OSError)
             exit(1)
-        else:
-            os.chdir(self.dir)  # Change to the directory that will contain the notes
-            return True
+        finally:
+            conn.close()
 
-    def insert_note(self, REAL_PATH: Path) -> Path:
-        # TODO Insert realpath into the database
+    def insert_note(self, TITLE: str, REAL_PATH: Path) -> Path:
+        try:
+            conn = sqlite3.connect(self.db_path)  # Connect to the database
+            conn.cursor().execute(
+                "INSERT INTO notes (title, path) VALUES ('{}', '{}')".format(
+                    TITLE, REAL_PATH
+                )
+            )
+            conn.commit()
+        except Exception as OSError:
+            print(OSError)
+            exit(1)
+        finally:
+            conn.close()
+
+    def delete_from_table(self, TITLE: Path):
+        """
+        (Query is by title of the note) This function not only deletes the note from the
+        table, but also deletes the file from the filesystem
+        """
         pass
 
 
