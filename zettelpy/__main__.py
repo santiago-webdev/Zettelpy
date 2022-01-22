@@ -67,12 +67,12 @@ def main():
     else:
         # The same but for permanent notes
         helper.open_note(slip_box.Zettel(NOTES_DIR).modf_zettel(user_args.title))
+
         # TODO, apart from deleting the file, also delete the entry on the database
         # and this should work with the -d flag, which is not implemented right now.
         if os.stat(user_args.title).st_size == 0:
             db_spawn.delete_from_table(user_args.title)
         else:
-            # TODO, fix: don't insert duplicates
             db_spawn.insert_note(str(user_args.title), realpath(user_args.title))
 
 
