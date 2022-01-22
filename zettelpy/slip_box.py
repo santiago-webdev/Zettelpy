@@ -50,16 +50,18 @@ class DatabaseManage(SlipBox):
         with conn:
             conn.cursor().execute(
                 """ CREATE TABLE notes (
-                    note_id     INTEGER PRIMARY KEY AUTOINCREMENT,
-                    title       TEXT NOT NULL,
-                    path        TEXT NOT NULL)"""
+                    note_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    title   TEXT NOT NULL,
+                    path    TEXT NOT NULL,
+                    UNIQUE(title)
+                    )"""
             )
 
     def insert_note(self, TITLE: str, REAL_PATH: Path) -> Path:
         conn = sqlite3.connect(self.db_path)  # Connect to the database
         with conn:
             conn.cursor().execute(
-                "INSERT INTO notes (title, path) VALUES ('{}', '{}')".format(
+                "INSERT OR IGNORE INTO notes (title, path) VALUES ('{}', '{}')".format(
                     TITLE, REAL_PATH
                 )
             )

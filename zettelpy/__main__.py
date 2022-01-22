@@ -4,7 +4,7 @@ from pathlib import Path
 from posixpath import realpath
 from sys import stdout
 from typing import Final
-from zettelpy import slip_box, helper_module
+from zettelpy import slip_box, helper_module as helper
 
 
 def cli() -> argparse.Namespace:
@@ -47,13 +47,11 @@ def main():
     db_spawn = slip_box.DatabaseManage(NOTES_DIR)  # Instantiate a DatabaseManage Object
     db_spawn.database_init()  # Create the database
 
-    check_first_actions = helper_module.first_actions(user_args.last, user_args.title)
+    check_first_actions = helper.first_actions(user_args.last, user_args.title)
     # If ^^ is a None we reassign it to user_args.title, if it contains some sort of
     # string we cast it to be a path
     if check_first_actions is not None:
-        user_args.title = Path(
-            helper_module.first_actions(user_args.last, user_args.title)
-        )
+        user_args.title = Path(helper.first_actions(user_args.last, user_args.title))
     else:
         user_args.title = check_first_actions
 
@@ -65,20 +63,16 @@ def main():
 
     if user_args.title is None:
         # This modf_temp_note returns a path, and we open it with open_note
-        helper_module.open_note(
-            slip_box.Zettel(NOTES_DIR).modf_temp_note()
-        )
+        helper.open_note(slip_box.Zettel(NOTES_DIR).modf_temp_note())
     else:
         # The same but for permanent notes
-        helper_module.open_note(
-            slip_box.Zettel(NOTES_DIR).modf_zettel(user_args.title)
-        )
-
+        helper.open_note(slip_box.Zettel(NOTES_DIR).modf_zettel(user_args.title))
         # TODO, apart from deleting the file, also delete the entry on the database
         # and this should work with the -d flag, which is not implemented right now.
         if os.stat(user_args.title).st_size == 0:
             db_spawn.delete_from_table(user_args.title)
         else:
+            # TODO, fix: don't insert duplicates
             db_spawn.insert_note(str(user_args.title), realpath(user_args.title))
 
 
