@@ -44,47 +44,35 @@ class DatabaseManage(SlipBox):
 
     def database_init(self):
         """Check if the database exists, if not create it and the table"""
-
-        try:
-            if self.db_path.is_file():
-                return
-
-            self.db_path.touch()  # Create it
-            conn = sqlite3.connect(self.db_path)  # Connect to the database
+        if self.db_path.is_file():
+            return
+        conn = sqlite3.connect(self.db_path)
+        with conn:
             conn.cursor().execute(
                 """ CREATE TABLE notes (
                     note_id     INTEGER PRIMARY KEY AUTOINCREMENT,
                     title       TEXT NOT NULL,
                     path        TEXT NOT NULL)"""
             )
-            conn.commit()
-        except Exception as OSError:
-            print(OSError)
-            exit(1)
-        finally:
-            conn.close()
 
     def insert_note(self, TITLE: str, REAL_PATH: Path) -> Path:
-        try:
-            conn = sqlite3.connect(self.db_path)  # Connect to the database
+        conn = sqlite3.connect(self.db_path)  # Connect to the database
+        with conn:
             conn.cursor().execute(
                 "INSERT INTO notes (title, path) VALUES ('{}', '{}')".format(
                     TITLE, REAL_PATH
                 )
             )
-            conn.commit()
-        except Exception as OSError:
-            print(OSError)
-            exit(1)
-        finally:
-            conn.close()
 
     def delete_from_table(self, TITLE: Path):
         """
         (Query is by title of the note) This function not only deletes the note from the
         table, but also deletes the file from the filesystem
         """
-        pass
+        conn = sqlite3.connect(self.db_path)  # Connect to the database
+        with conn:
+            conn.cursor().execute("DELETE FROM notes WHERE title='{}'".format(TITLE))
+        os.remove(TITLE)  # Remove the file
 
 
 class Zettel(SlipBox):
@@ -114,7 +102,5 @@ class Zettel(SlipBox):
             title_zettel.touch()  # Create the file
             # TODO, insert path to the database
             helper_module.template_do('title zettel', title_zettel)  # And insert title
-
         helper_module.receive_from_stdin(title_zettel)
-
         return title_zettel

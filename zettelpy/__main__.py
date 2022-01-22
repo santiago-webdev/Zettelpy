@@ -64,21 +64,20 @@ def main():
         return stdout.write(str(realpath(user_args.title)))
 
     if user_args.title is None:
+        # This modf_temp_note returns a path, and we open it with open_note
         helper_module.open_note(
             slip_box.Zettel(NOTES_DIR).modf_temp_note()
-        )  # This modf_temp_note returns a path, and we open it with open_note
+        )
     else:
+        # The same but for permanent notes
         helper_module.open_note(
             slip_box.Zettel(NOTES_DIR).modf_zettel(user_args.title)
-        )  # The same but for permanent notes
+        )
 
         # TODO, apart from deleting the file, also delete the entry on the database
         # and this should work with the -d flag, which is not implemented right now.
         if os.stat(user_args.title).st_size == 0:
-            os.remove(user_args.title)
-            # db_spawn.delete_from_table(user_args.title)
-            # TODO if the note that we closed with our EDITOR is empty, delete the note
-            # and also delete the entry on the database
+            db_spawn.delete_from_table(user_args.title)
         else:
             db_spawn.insert_note(str(user_args.title), realpath(user_args.title))
 
