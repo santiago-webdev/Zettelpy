@@ -47,33 +47,28 @@ def main():
     db_spawn = slip_box.DatabaseManage(NOTES_DIR)  # Instantiate a DatabaseManage Object
     db_spawn.database_init()  # Create the database
 
-    check_first_actions = helper.first_actions(user_args.last, user_args.title)
-    # If ^^ is a None we reassign it to user_args.title, if it contains some sort of
-    # string we cast it to be a path
-    if check_first_actions is not None:
-        user_args.title = Path(helper.first_actions(user_args.last, user_args.title))
-    else:
-        user_args.title = check_first_actions
+    zettel_mode = helper.first_actions(user_args.last, user_args.title)
 
-    # If the flag -p and title are present return a path through standard output
-    if user_args.path is True and user_args.title is not None:
-        if not user_args.title.is_file():  # But only if that file exists
+    # If the argument/flag title(which in this case would be zettel_mode) and -p are
+    # present return a path through standard output
+    if user_args.path is True and zettel_mode is not None:
+        if not zettel_mode.is_file():  # But only if that file exists
             return print('The file doesn\'t exists')
-        return stdout.write(str(realpath(user_args.title)))
+        return stdout.write(str(realpath(zettel_mode)))
 
-    if user_args.title is None:
+    if zettel_mode is None:
         # This modf_temp_note returns a path, and we open it with open_note
         helper.open_note(slip_box.Zettel(NOTES_DIR).modf_temp_note())
     else:
         # The same but for permanent notes
-        helper.open_note(slip_box.Zettel(NOTES_DIR).modf_zettel(user_args.title))
+        helper.open_note(slip_box.Zettel(NOTES_DIR).modf_zettel(zettel_mode))
 
         # TODO, apart from deleting the file, also delete the entry on the database
         # and this should work with the -d flag, which is not implemented right now.
-        if os.stat(user_args.title).st_size == 0:
-            db_spawn.delete_from_table(user_args.title)
+        if os.stat(zettel_mode).st_size == 0:
+            db_spawn.delete_on_empty_file(zettel_mode)
         else:
-            db_spawn.insert_note(str(user_args.title), realpath(user_args.title))
+            db_spawn.insert_note(zettel_mode, realpath(zettel_mode))
 
 
 if __name__ == '__main__':

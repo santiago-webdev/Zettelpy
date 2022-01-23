@@ -59,7 +59,8 @@ def first_actions(flag_last: bool, flag_perm: Optional[Path] = None) -> str or N
             return last_note.read().rstrip('\n')
     elif flag_last is False and flag_perm is not None:
         with open('last_note', 'w') as last_accessed:  # Write mode
-            main_arg_check = check_extension(flag_perm)  # Make the Path a .md file
+            flag_perm = check_extension(flag_perm)  # Make flag_perm a .md file
+            main_arg_check = Path('permanent', flag_perm)  # Correct the path
             last_accessed.write(str(main_arg_check))  # And write the Path to the file
             return main_arg_check
     elif flag_last is False and flag_perm is None:

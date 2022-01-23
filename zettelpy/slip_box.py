@@ -9,8 +9,9 @@ class SlipBox:
 
     def __init__(self, directory: str) -> None:
         self.dir: Path = Path(directory)  # We put all our files in here
-        self.dir_fleeting: Path = Path(self.dir, 'fleeting')  # Temp notes go here
-        self.dir_last_note: Path = Path(self.dir, 'last_note')  # Temp notes go here
+        self.dir_fleeting = Path(self.dir, 'fleeting')  # Temp notes go here
+        self.dir_permanent = Path(self.dir, 'permanent')  # Permanent notes go here
+        self.dir_last_note = Path(self.dir, 'last_note')  # Temp notes go here
 
     def slipbox_init(self):
         """If the dir or the DB under the given path doesn't exist create it"""
@@ -23,6 +24,10 @@ class SlipBox:
             # Create the fleeting notes directory
             if not self.dir_fleeting.is_dir():
                 self.dir_fleeting.mkdir(parents=True, exist_ok=True)
+
+            # Create the permanent notes directory
+            if not self.dir_permanent.is_dir():
+                self.dir_permanent.mkdir(parents=True, exist_ok=True)
 
             # Create the file were we store the path to the last accessed note
             if not self.dir_last_note.is_file():
@@ -40,7 +45,7 @@ class DatabaseManage(SlipBox):
 
     def __init__(self, directory: Path) -> None:
         super().__init__(directory)
-        self.db_path: Path = Path(directory, 'slip_box.db')  # This is the database
+        self.db_path = Path(directory, 'slip_box.db')  # This is the database
 
     def database_init(self):
         """Check if the database exists, if not create it and the table"""
@@ -57,7 +62,8 @@ class DatabaseManage(SlipBox):
                     )"""
             )
 
-    def insert_note(self, TITLE: str, REAL_PATH: Path) -> Path:
+    def insert_note(self, TITLE: Path, REAL_PATH: Path) -> Path:
+        TITLE = TITLE.stem  # Get only the name, without extensions or parent directory
         conn = sqlite3.connect(self.db_path)  # Connect to the database
         with conn:
             conn.cursor().execute(
@@ -66,7 +72,7 @@ class DatabaseManage(SlipBox):
                 )
             )
 
-    def delete_from_table(self, TITLE: Path):
+    def delete_on_empty_file(self, TITLE: Path):
         """
         (Query is by title of the note) This function not only deletes the note from the
         table, but also deletes the file from the filesystem
@@ -102,7 +108,6 @@ class Zettel(SlipBox):
     def modf_zettel(self, title_zettel: Path) -> Path:
         if not title_zettel.is_file():  # If the file doesn't exists
             title_zettel.touch()  # Create the file
-            # TODO, insert path to the database
             helper_module.template_do('title zettel', title_zettel)  # And insert title
         helper_module.receive_from_stdin(title_zettel)
         return title_zettel
