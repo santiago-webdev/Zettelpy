@@ -55,7 +55,7 @@ class DatabaseManage(SlipBox):
         with conn:
             conn.cursor().execute(
                 """ CREATE TABLE notes (
-                    note_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    note_id INTEGER PRIMARY KEY NOT NULL,
                     title   TEXT NOT NULL,
                     path    TEXT NOT NULL,
                     UNIQUE(title)
