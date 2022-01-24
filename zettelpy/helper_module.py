@@ -1,6 +1,6 @@
 import shutil
 import subprocess
-from datetime import datetime
+from datetime import datetime, date
 from os import getenv
 from pathlib import Path
 from sys import stdin
@@ -9,7 +9,7 @@ from typing import Optional
 
 def get_date_as_path(NOTE_PATH: Path) -> Path:
     """Get the entire date, and return it as a path"""
-    return Path(NOTE_PATH, datetime.today().strftime("%Y%m%d") + ".md")
+    return Path(NOTE_PATH, date.today().strftime("%Y%m%d") + ".md")
 
 
 def receive_from_stdin(NOTE_PATH: Path) -> True:
@@ -72,7 +72,7 @@ def first_actions(flag_last: bool, flag_perm: Optional[Path] = None) -> str or N
 def template_do(request: str, NOTE_PATH: Path):
     if request == 'title fleeting':
         NEW_TITLE = '# Notes for today ' + str(
-            datetime.today().strftime('%d of %B, %Y') + '\n'
+            date.today().strftime('%d of %B, %Y') + '\n'
         )
         with open(NOTE_PATH, 'w') as title_note:
             title_note.write(NEW_TITLE)

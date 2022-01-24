@@ -58,6 +58,7 @@ class DatabaseManage(SlipBox):
                     note_id INTEGER PRIMARY KEY NOT NULL,
                     title   TEXT NOT NULL,
                     path    TEXT NOT NULL,
+                    date    TEXT NULL,
                     UNIQUE(title)
                     )"""
             )
@@ -67,7 +68,8 @@ class DatabaseManage(SlipBox):
         conn = sqlite3.connect(self.db_path)  # Connect to the database
         with conn:
             conn.cursor().execute(
-                "INSERT OR IGNORE INTO notes (title, path) VALUES ('{}', '{}')".format(
+                """INSERT OR IGNORE INTO notes (title, path, date) VALUES ('{}', '{}',
+                DATETIME('now'))""".format(
                     TITLE, REAL_PATH
                 )
             )
