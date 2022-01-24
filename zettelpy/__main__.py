@@ -3,7 +3,6 @@ import os
 from pathlib import Path
 from posixpath import realpath
 from sys import stdout
-from typing import Final
 from zettelpy import slip_box, helper_module as helper
 
 
@@ -36,9 +35,9 @@ def cli() -> argparse.Namespace:
 
 
 def main():
-    NOTES_DIR: Final = Path(
-        os.getenv('ZETTELPY_DIR')
-    )  # Directory used to store the notes
+    # If the env var $ZETTELPY_DIR is not set, assign a default value to NOTES_DIR
+    if not (NOTES_DIR := os.getenv('ZETTELPY_DIR')):
+        NOTES_DIR = Path(os.getenv('HOME'), 'zettelpy')
     user_args = cli()
 
     slip_box_spawn = slip_box.SlipBox(NOTES_DIR)  # Instantiate a SlipBox Object
