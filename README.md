@@ -28,8 +28,8 @@ There is no uninstaller, you just need to delete some directories, so to uninsta
 launcher, and the directory for storing the notes.
 
 ```bash
-rm ~/path/to/this/repo/Zettelpy
-rm ~/zettelpy # This is the default location of the notes
+rm -rf ~/path/to/this/repo/Zettelpy
+rm -r ~/zettelpy # This is the default location of the notes
 rm ~/.local/bin/zet # This is the launcher
 ```
 
@@ -96,3 +96,5 @@ disown
 6. Add a function/flag/way of checking the notes, to refresh the database
 7. Make the program work with IDs and even when the notes are in subdirectories
 8. A way of dealing with extensions
+9. Add something in the last_note file for the first time we run the program
+10. Be able to delete temporary notes by emptying the file

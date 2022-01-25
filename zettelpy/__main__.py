@@ -26,7 +26,10 @@ def cli() -> argparse.Namespace:
         help='Open the last permanent note that you have accessed',
     )
     parser.add_argument(
-        '-p', '--path', action='store_true', help='Shows real path of the note'
+        '-p',
+        '--path',
+        action='store_true',
+        help='Prints the path to the note, it can also be used for command replacement',
     )
     # parser.add_argument(
     #     '-d', '--delete', action='store_true', help='Delete the note by title'
@@ -60,7 +63,7 @@ def main():
         helper.open_note(slip_box.Zettel(NOTES_DIR).modf_temp_note())
     else:
         # The same but for permanent notes
-        helper.open_note(slip_box.Zettel(NOTES_DIR).modf_zettel(zettel_mode))
+        helper.open_note(slip_box.Zettel(NOTES_DIR).modf_zettel(Path(zettel_mode)))
 
         # TODO, apart from deleting the file, also delete the entry on the database
         # and this should work with the -d flag, which is not implemented right now.
@@ -68,6 +71,18 @@ def main():
             db_spawn.delete_on_empty_file(zettel_mode)
         else:
             db_spawn.insert_note(zettel_mode, realpath(zettel_mode))
+
+        # TODO Query the db for information about the path
+        # c.execute("SELECT path FROM notes WHERE title='test'")
+
+        # conn = sqlite3.connect(self.db_path)  # Connect to the database
+        # with conn:
+        #     conn.cursor().execute(
+        #         """INSERT OR IGNORE INTO notes (title, path, date) VALUES ('{}', '{}',
+        #         DATETIME('now'))""".format(
+        #             TITLE, REAL_PATH
+        #         )
+        #     )
 
 
 if __name__ == '__main__':

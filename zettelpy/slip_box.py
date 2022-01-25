@@ -64,6 +64,11 @@ class DatabaseManage(SlipBox):
             )
 
     def insert_note(self, TITLE: Path, REAL_PATH: Path) -> Path:
+        """
+        There's no duplicates, the database will hold only one row for note, meaning
+        that this entry will be created just once, and every other requests to INSERT
+        will be ignored
+        """
         TITLE = TITLE.stem  # Get only the name, without extensions or parent directory
         conn = sqlite3.connect(self.db_path)  # Connect to the database
         with conn:
@@ -73,6 +78,9 @@ class DatabaseManage(SlipBox):
                     TITLE, REAL_PATH
                 )
             )
+
+    def return_path(self, TITLE: Path) -> Path:
+        pass
 
     def delete_on_empty_file(self, TITLE: Path):
         """
@@ -107,9 +115,9 @@ class Zettel(SlipBox):
         helper_module.receive_from_stdin(NOTE_PATH)  # Write anything coming from stdin
         return NOTE_PATH
 
-    def modf_zettel(self, title_zettel: Path) -> Path:
-        if not title_zettel.is_file():  # If the file doesn't exists
-            title_zettel.touch()  # Create the file
-            helper_module.template_do('title zettel', title_zettel)  # And insert title
-        helper_module.receive_from_stdin(title_zettel)
-        return title_zettel
+    def modf_zettel(self, TITLE_ZETTEL: Path) -> Path:
+        if not TITLE_ZETTEL.is_file():  # If the file doesn't exists
+            TITLE_ZETTEL.touch()  # Create the file
+            helper_module.template_do('title zettel', TITLE_ZETTEL)  # And insert title
+        helper_module.receive_from_stdin(TITLE_ZETTEL)
+        return TITLE_ZETTEL
