@@ -23,14 +23,6 @@ an environment variable, the default directory is at ~/zettelpy.
 export ZETTELPY_DIR="${XDG_DATA_HOME}/zettelpy"
 ```
 
-### Editing the notes
-This project doesn't aim to be a note editor, so it will launch the note to whatever it
-is that you have set up in your \$EDITOR in your shell, in my case it would be
-
-```bash
-export EDITOR='nvim'
-```
-
 ## How to uninstall
 There is no uninstaller, you just need to delete some directories, so to uninstall you need to delete the repo, the
 launcher, and the directory for storing the notes.
@@ -48,6 +40,15 @@ rm ~/.local/bin/zet # This is the launcher
 - To update the program you will need git
 
 ## Usage:
+
+### Editing the notes
+This project doesn't aim to be a note editor, so it will launch the note to whatever it
+is that you have set up in your \$EDITOR in your shell, in my case it would be
+
+```bash
+export EDITOR='nvim'
+```
+
 ### Fleeting/Quick notes
 You can use this mode which is the default mode to take quick notes.
 
