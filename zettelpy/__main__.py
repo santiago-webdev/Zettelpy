@@ -62,27 +62,22 @@ def main():
         # This modf_temp_note returns a path, and we open it with open_note
         helper.open_note(slip_box.Zettel(NOTES_DIR).modf_temp_note())
     else:
+        # Query the database for a path first, return_path actually returns a tuple when
+        # there's a value present or a NoneType, so if the walrus operator works we
+        # assign the first and only element of this tuple to zettel_mode
+        if db_can_return_path := db_spawn.return_path(Path(zettel_mode).stem):
+            zettel_mode = db_can_return_path[0]
+
         # The same but for permanent notes
         helper.open_note(slip_box.Zettel(NOTES_DIR).modf_zettel(Path(zettel_mode)))
 
-        # TODO, apart from deleting the file, also delete the entry on the database
-        # and this should work with the -d flag, which is not implemented right now.
-        if os.stat(zettel_mode).st_size == 0:
+        if os.stat(zettel_mode).st_size == 0:  # Check the size of the file
+            # If it's empty delete the file
             db_spawn.delete_on_empty_file(zettel_mode)
         else:
-            db_spawn.insert_note(zettel_mode, realpath(zettel_mode))
-
-        # TODO Query the db for information about the path
-        # c.execute("SELECT path FROM notes WHERE title='test'")
-
-        # conn = sqlite3.connect(self.db_path)  # Connect to the database
-        # with conn:
-        #     conn.cursor().execute(
-        #         """INSERT OR IGNORE INTO notes (title, path, date) VALUES ('{}', '{}',
-        #         DATETIME('now'))""".format(
-        #             TITLE, REAL_PATH
-        #         )
-        #     )
+            # If the file is not empty, try to insert it into the database, which will
+            # be ignored if it's detected that there's a note with the same title
+            db_spawn.insert_note(Path(zettel_mode).stem, realpath(zettel_mode))
 
 
 if __name__ == '__main__':

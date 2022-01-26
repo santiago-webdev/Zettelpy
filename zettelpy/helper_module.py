@@ -7,9 +7,9 @@ from sys import stdin
 from typing import Optional
 
 
-def get_date_as_path(NOTE_PATH: Path) -> Path:
+def get_date_as_path(WD_TEMP_NOTE: Path) -> Path:
     """Get the entire date, and return it as a path"""
-    return Path(NOTE_PATH, date.today().strftime("%Y%m%d") + ".md")
+    return Path(WD_TEMP_NOTE, date.today().strftime("%Y%m%d") + ".md")
 
 
 def receive_from_stdin(NOTE_PATH: Path) -> True:
@@ -34,14 +34,14 @@ def open_note(PATH_TO_NOTE: Path):
     return subprocess.run([getenv('EDITOR'), PATH_TO_NOTE])
 
 
-def check_extension(to_check: Path):
-    if to_check.stem == to_check.name:
-        return to_check.with_suffix('.md')
+def check_extension(TO_CHECK: Path):
+    if TO_CHECK.stem == TO_CHECK.name:
+        return TO_CHECK.with_suffix('.md')
     else:
-        return to_check
+        return TO_CHECK
 
 
-def first_actions(flag_last: bool, flag_perm: Optional[Path] = None) -> str or None:
+def first_actions(flag_is_last: bool, flag_perm: Optional[Path] = None) -> str or None:
     """
     Checks for the -l flag, which stands for last accessed note, do some logic explained
     below, and after this return either a str or None.
@@ -54,16 +54,16 @@ def first_actions(flag_last: bool, flag_perm: Optional[Path] = None) -> str or N
     not specified an ID, so it means it wants to open a fleeting note.
     """
 
-    if flag_last is True:
+    if flag_is_last is True:
         with open('last_note', 'r') as last_note:  # Read mode
             return last_note.read().rstrip('\n')
-    elif flag_last is False and flag_perm is not None:
+    elif flag_is_last is False and flag_perm is not None:
         with open('last_note', 'w') as last_accessed:  # Write mode
             flag_perm = check_extension(flag_perm)  # Make flag_perm a .md file
             main_arg_check = Path('permanent', flag_perm)  # Correct the path
             last_accessed.write(str(main_arg_check))  # And write the Path to the file
             return main_arg_check
-    elif flag_last is False and flag_perm is None:
+    elif flag_is_last is False and flag_perm is None:
         return None
     else:
         raise TypeError('Something is wrong with the parameters given to this function')

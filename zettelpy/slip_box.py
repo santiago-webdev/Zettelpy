@@ -63,13 +63,12 @@ class DatabaseManage(SlipBox):
                     )"""
             )
 
-    def insert_note(self, TITLE: Path, REAL_PATH: Path) -> Path:
+    def insert_note(self, TITLE: str, REAL_PATH: Path) -> Path:
         """
         There's no duplicates, the database will hold only one row for note, meaning
         that this entry will be created just once, and every other requests to INSERT
         will be ignored
         """
-        TITLE = TITLE.stem  # Get only the name, without extensions or parent directory
         conn = sqlite3.connect(self.db_path)  # Connect to the database
         with conn:
             conn.cursor().execute(
@@ -79,8 +78,19 @@ class DatabaseManage(SlipBox):
                 )
             )
 
-    def return_path(self, TITLE: Path) -> Path:
-        pass
+    def return_path(self, TITLE: str) -> Path:
+        """
+        This function returns either a None or a tuple with just one element when it
+        finds something on the database
+        """
+        conn = sqlite3.connect(self.db_path)  # Connect to the database
+        with conn:
+            cur = conn.cursor()
+            cur.execute(
+                "SELECT path FROM notes WHERE title='{}'".format(Path(TITLE).stem)
+            )
+            conn.commit()
+            return cur.fetchone()
 
     def delete_on_empty_file(self, TITLE: Path):
         """
@@ -89,7 +99,10 @@ class DatabaseManage(SlipBox):
         """
         conn = sqlite3.connect(self.db_path)  # Connect to the database
         with conn:
-            conn.cursor().execute("DELETE FROM notes WHERE title='{}'".format(TITLE))
+            conn.cursor().execute(
+                "DELETE FROM notes WHERE title='{}'".format(Path(TITLE).stem)
+            )
+            conn.commit()
         os.remove(TITLE)  # Remove the file
 
 
