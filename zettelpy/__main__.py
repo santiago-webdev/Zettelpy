@@ -31,9 +31,9 @@ def cli() -> argparse.Namespace:
         action='store_true',
         help='Prints the path to the note, it can also be used for command replacement',
     )
-    # parser.add_argument(
-    #     '-d', '--delete', action='store_true', help='Delete the note by title'
-    # )
+    parser.add_argument(
+        '-d', '--delete', action='store_true', help='Delete the note by title'
+    )
     return parser.parse_args()
 
 
@@ -50,6 +50,10 @@ def main():
     db_spawn.database_init()  # Create the database
 
     zettel_mode = helper.first_actions(user_args.last, user_args.title)
+
+    # If we pass the flag
+    if user_args.delete is True and user_args.title is not None:
+        return db_spawn.delete_row_and_file(zettel_mode)
 
     # If the argument/flag title(which in this case would be zettel_mode) and -p are
     # present return a path through standard output
@@ -73,7 +77,7 @@ def main():
 
         if os.stat(zettel_mode).st_size == 0:  # Check the size of the file
             # If it's empty delete the file
-            db_spawn.delete_on_empty_file(zettel_mode)
+            db_spawn.delete_row_and_file(zettel_mode)
         else:
             # If the file is not empty, try to insert it into the database, which will
             # be ignored if it's detected that there's a note with the same title

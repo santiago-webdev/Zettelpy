@@ -92,7 +92,7 @@ class DatabaseManage(SlipBox):
             conn.commit()
             return cur.fetchone()
 
-    def delete_on_empty_file(self, TITLE: Path):
+    def delete_row_and_file(self, TITLE: Path):
         """
         (Query is by title of the note) This function not only deletes the note from the
         table, but also deletes the file from the filesystem

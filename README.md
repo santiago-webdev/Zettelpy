@@ -15,12 +15,20 @@ A personal knowledge management system based on Zettelkasten
 
 ## How to install
 You can run the installer, and if you want to change the default directory in which the notes are stored you can export
-an environment variable, the default directory is at ~/zettelpy
+an environment variable, the default directory is at ~/zettelpy.
 
 ```bash
 ./install.sh
 
 export ZETTELPY_DIR="${XDG_DATA_HOME}/zettelpy"
+```
+
+### Editing the notes
+This project doesn't aim to be a note editor, so it will launch the note to whatever it
+is that you have set up in your \$EDITOR in your shell, in my case it would be
+
+```bash
+export EDITOR='nvim'
 ```
 
 ## How to uninstall
@@ -40,7 +48,7 @@ rm ~/.local/bin/zet # This is the launcher
 - To update the program you will need git
 
 ## Usage:
-### Fleeting notes
+### Fleeting/Quick notes
 You can use this mode which is the default mode to take quick notes.
 
 ```bash
@@ -58,8 +66,10 @@ zet "The Aleph"
 *You don't need to specify the extension but using "The Aleph.md" would also work*
 
 ### Delete notes
-If you have decided that you want to delete the note that you are editing, just empty the file that you are in, the file
-and the row in the database will be deleted after you quit the file
+If you have decided that you want to delete the note that you are editing, just empty
+the file that you are in in vim/nvim it would be with `:%d`, the file and the row in the
+database will be deleted after you quit the file, this method and using the -d or
+--delete flag only work for permanent notes
 
 ### How do you link the notes?
 By the name of this repo you can tell that this program was made with the intention of being used for the zettelkasten
@@ -89,10 +99,10 @@ disown
 ## TODO
 1. Find a fast way of searching through the notes
 2. Create tools to fix errors introduced into the database
-3. Being able to delete notes with a flag -d
-4. Replace info automatically from the templates
-5. Add a function/flag/way of checking the notes, to refresh the database
-6. Make the program work with IDs and even when the notes are in subdirectories
-7. A way of dealing with extensions
-8. Add something in the last_note file for the first time we run the program
-9. Be able to delete temporary notes by emptying the file
+3. Replace info automatically from the templates
+4. Add a function/flag/way of checking the notes, to refresh the database
+5. Make the program work with IDs and even when the notes are in subdirectories
+6. A way of dealing with extensions
+7. Add something in the last_note file for the first time we run the program
+8. Be able to delete temporary notes, I don't want to do this manually but it is for now
+9. Filter flags, maybe even use ripgrep to searh for stuff
