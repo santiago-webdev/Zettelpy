@@ -57,7 +57,10 @@ def main():
 
     # If the argument/flag title(which in this case would be zettel_mode) and -p are
     # present return a path through standard output
-    if user_args.path is True and zettel_mode is not None:
+    if user_args.path is True and user_args.last is True:
+        with open('last_note', 'r') as last_note:  # Read mode
+            return realpath(last_note.read().rstrip('\n'))
+    elif user_args.path is True and zettel_mode is not None:
         if not zettel_mode.is_file():  # But only if that file exists
             return print('The file doesn\'t exists')
         return stdout.write(str(realpath(zettel_mode)))

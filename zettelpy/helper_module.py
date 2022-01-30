@@ -79,7 +79,7 @@ def template_do(request: str, NOTE_PATH: Path):
         template_do('new insertion', NOTE_PATH)
     elif request == 'new insertion':
         NEW_INSERTION = '\n## At ' + str(
-            datetime.today().strftime('%H:%M:%S') + '\n' + '###\n\n'
+            datetime.today().strftime('%H:%M:%S') + '\n' + '\n'
         )
         with open(NOTE_PATH, 'a') as fleeting_note:  # Write mode
             return fleeting_note.write(NEW_INSERTION)
