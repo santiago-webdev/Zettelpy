@@ -7,11 +7,13 @@ from sys import stdin
 from typing import Optional
 
 
+# Create the title of a note as a date
 def get_date_as_path(WD_TEMP_NOTE: Path) -> Path:
     """Get the entire date, and return it as a path"""
     return Path(WD_TEMP_NOTE, date.today().strftime("%Y%m%d") + ".md")
 
 
+# Receive data from stdin
 def receive_from_stdin(NOTE_PATH: Path) -> True:
     if stdin.isatty():
         return False
@@ -30,10 +32,12 @@ def receive_from_stdin(NOTE_PATH: Path) -> True:
             return True
 
 
+# Open the note with your $EDITOR
 def open_note(PATH_TO_NOTE: Path):
     return subprocess.run([getenv('EDITOR'), PATH_TO_NOTE])
 
 
+# Check the extension of the note
 def check_extension(TO_CHECK: Path):
     if TO_CHECK.stem == TO_CHECK.name:
         return TO_CHECK.with_suffix('.md')
@@ -41,6 +45,7 @@ def check_extension(TO_CHECK: Path):
         return TO_CHECK
 
 
+# First actions taken when starting the program
 def first_actions(flag_is_last: bool, flag_perm: Optional[Path] = None) -> str or None:
     """
     Checks for the -l flag, which stands for last accessed note, do some logic explained
@@ -69,7 +74,9 @@ def first_actions(flag_is_last: bool, flag_perm: Optional[Path] = None) -> str o
         raise TypeError('Something is wrong with the parameters given to this function')
 
 
+# Template actions
 def template_do(request: str, NOTE_PATH: Path):
+    """Set of actions used to manage the contents of the notes"""
     if request == 'title fleeting':
         NEW_TITLE = '# Notes for today ' + str(
             date.today().strftime('%d of %B, %Y') + '\n'
@@ -84,9 +91,24 @@ def template_do(request: str, NOTE_PATH: Path):
         with open(NOTE_PATH, 'a') as fleeting_note:  # Write mode
             return fleeting_note.write(NEW_INSERTION)
     elif request == 'title zettel':
-        # TODO replace text in the file after doing the copy of the file
         NEW_ZETTEL = Path(__file__).parent / 'templates' / 'title_header.md'
         shutil.copyfile(NEW_ZETTEL, NOTE_PATH)
+        print(NOTE_PATH)
+
+        date_suffix = ["th", "st", "nd", "rd"]  # Suffix for the numbers of the months
+
+        day_number = int(date.today().strftime('%d'))  # Get the number of the day
+        # Check the number, and apply 'th', 'st', 'nd', or 'rd' respectively
+        if day_number % 10 in [1, 2, 3] and day_number not in [11, 12, 13]:
+            fixed_day = str(day_number) + date_suffix[day_number % 10]
+        else:
+            fixed_day = str(day_number) + date_suffix[0]
+
+        # Format the note to be more pretty
+        formated_date = date.today().strftime('%A, %B {}, %Y').format(fixed_day)
+
+        # And insert the pretty date into the second line of the file
+        subprocess.run(['sed', '-i', "2s/TODO/'{}'/g".format(formated_date), NOTE_PATH])
         return NOTE_PATH
     else:
         raise TypeError('The given parameter doesn\'t correspond to any template')

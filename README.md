@@ -98,7 +98,7 @@ disown
 ```
 
 ## TODO
-1. Find a fast way of searching through the notes
+1. Find a fast way of searching through the notes, adding an interactive mode might be needed
 2. Create tools to fix errors introduced into the database
 3. Replace info automatically from the templates
 4. Add a function/flag/way of checking the notes, to refresh the database
