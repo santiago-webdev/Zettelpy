@@ -102,11 +102,17 @@ class DatabaseManage(SlipBox):
         """
         conn = sqlite3.connect(self.db_path)  # Connect to the database
         with conn:
-            conn.cursor().execute(
-                "DELETE FROM notes WHERE title='{}'".format(Path(TITLE).stem)
-            )
-            conn.commit()
-        os.remove(TITLE)  # Remove the file
+            try:
+                conn.cursor().execute(
+                    "DELETE FROM notes WHERE title='{}'".format(Path(TITLE).stem)
+                )
+                conn.commit()
+                os.remove(TITLE)  # Remove the file
+                print('Successfully deleted the note')
+            except Exception as OSError:
+                print(OSError)
+                print("The note doesn't exists or was already deleted")
+                exit(1)
 
 
 # Zettel
