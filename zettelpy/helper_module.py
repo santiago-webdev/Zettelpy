@@ -112,8 +112,9 @@ def template_do(request: str, NOTE_PATH: Path):
     elif request == 'title zettel':
         NEW_ZETTEL = Path(__file__).parent / 'templates' / 'title_header.md'
         shutil.copyfile(NEW_ZETTEL, NOTE_PATH)
-        print(NOTE_PATH)
 
+        title_of_note = NOTE_PATH.stem + ' -'
+        subprocess.run(['sed', '-i', '1s/TODO/{}/g'.format(title_of_note), NOTE_PATH])
         subprocess.run(['sed', '-i', '3s/TODO/{}/g'.format(pretty_date()), NOTE_PATH])
         return NOTE_PATH
     else:
