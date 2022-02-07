@@ -73,9 +73,13 @@ database will be deleted after you quit the file, this method and using the -d o
 --delete flag only work for permanent notes
 
 ### How do you link the notes?
-By the name of this repo you can tell that this program was made with the intention of being used for the zettelkasten
-method, the first one or two attempts of making this a usable tools I used ctags to link each file together, but now I
-decided to use [this language server](https://github.com/artempyanykh/zeta-note).
+By the name of this repo you can tell that this program was made with the
+intention of being used for the zettelkasten method.
+
+I decided to not include a native tool, and let the users choose and rely on an
+external tool of their choice, the first one or two attempts of making this
+project a usable tool was with the usage of ctags to link each file together,
+but now I'm personally using this [this language server](https://github.com/artempyanykh/zeta-note).
 
 ## Flags
 
@@ -99,11 +103,9 @@ disown
 
 ## TODO
 1. Find a fast way of searching through the notes, adding an interactive mode might be needed
-2. Create tools to fix errors introduced into the database
-3. ~~Replace info automatically from the templates~~ Make this dynamic using differenc templates
-4. Add a function/flag/way of checking the notes, to refresh the database
-5. Make the program work with IDs and even when the notes are in subdirectories
-6. A way of dealing with extensions
-7. Add something in the last_note file for the first time we run the program
-8. Be able to delete temporary notes, I don't want to do this manually but it is for now
-9. Filter flags, maybe even use ripgrep to searh for stuff
+2. Create tools to fix errors introduced into the database, by adding a
+   function/flag/way of checking the notes, to refresh the database.
+3. ~~Replace info automatically from the templates~~ Make this dynamic by using different templates
+4. Add something in the last_note file for the first time we run the program
+5. Be able to delete temporary notes, I don't want to do this manually but it is for now
+6. Filter flags, maybe even use ripgrep to search for stuff
