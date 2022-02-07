@@ -1,3 +1,4 @@
+# Imports
 import shutil
 import subprocess
 from datetime import datetime, date
@@ -11,6 +12,22 @@ from typing import Optional
 def get_date_as_path(WD_TEMP_NOTE: Path) -> Path:
     """Get the entire date, and return it as a path"""
     return Path(WD_TEMP_NOTE, date.today().strftime("%Y%m%d") + ".md")
+
+
+# Actual date, long format with suffix on the number
+def pretty_date() -> str:
+    """Return a nicely formatted string based on the actual date"""
+    date_suffix = ['th', 'st', 'nd', 'rd']  # Suffix for the number of days in the month
+    day_number = int(date.today().strftime('%d'))  # Get the number of the day
+
+    # Check the number, and apply 'th', 'st', 'nd', or 'rd' respectively
+    if day_number % 10 in [1, 2, 3] and day_number not in [11, 12, 13]:
+        fixed_day = str(day_number) + date_suffix[day_number % 10]
+    else:
+        fixed_day = str(day_number) + date_suffix[0]
+
+    # Format the note to be more pretty
+    return date.today().strftime('%A, %B {}, %Y.').format(fixed_day)
 
 
 # Receive data from stdin
@@ -77,38 +94,27 @@ def first_actions(flag_is_last: bool, flag_perm: Optional[Path] = None) -> str o
 # Template actions
 def template_do(request: str, NOTE_PATH: Path):
     """Set of actions used to manage the contents of the notes"""
+
+    # Used in temporary/fleeting notes
     if request == 'title fleeting':
-        NEW_TITLE = '# Notes for today ' + str(
-            date.today().strftime('%d of %B, %Y') + '\n'
-        )
+        NEW_TITLE: str = '# Notes for today -> ' + pretty_date() + '\n'
         with open(NOTE_PATH, 'w') as title_note:
             title_note.write(NEW_TITLE)
         template_do('new insertion', NOTE_PATH)
     elif request == 'new insertion':
-        NEW_INSERTION = '\n## At ' + str(
+        NEW_INSERTION = '\n### At ' + str(
             datetime.today().strftime('%H:%M:%S') + '\n' + '\n'
         )
         with open(NOTE_PATH, 'a') as fleeting_note:  # Write mode
             return fleeting_note.write(NEW_INSERTION)
+
+    # Used in zettel/permanent notes
     elif request == 'title zettel':
         NEW_ZETTEL = Path(__file__).parent / 'templates' / 'title_header.md'
         shutil.copyfile(NEW_ZETTEL, NOTE_PATH)
         print(NOTE_PATH)
 
-        date_suffix = ["th", "st", "nd", "rd"]  # Suffix for the numbers of the months
-
-        day_number = int(date.today().strftime('%d'))  # Get the number of the day
-        # Check the number, and apply 'th', 'st', 'nd', or 'rd' respectively
-        if day_number % 10 in [1, 2, 3] and day_number not in [11, 12, 13]:
-            fixed_day = str(day_number) + date_suffix[day_number % 10]
-        else:
-            fixed_day = str(day_number) + date_suffix[0]
-
-        # Format the note to be more pretty
-        formated_date = date.today().strftime('%A, %B {}, %Y').format(fixed_day)
-
-        # And insert the pretty date into the second line of the file
-        subprocess.run(['sed', '-i', "2s/TODO/'{}'/g".format(formated_date), NOTE_PATH])
+        subprocess.run(['sed', '-i', '3s/TODO/{}/g'.format(pretty_date()), NOTE_PATH])
         return NOTE_PATH
     else:
         raise TypeError('The given parameter doesn\'t correspond to any template')
