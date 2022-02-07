@@ -1,9 +1,11 @@
+# Imports
 import os
 import sqlite3
 from pathlib import Path
 from zettelpy import helper_module
 
 
+# SlipBox
 class SlipBox:
     """Instantiate an object that can create the directory hierarchy"""
 
@@ -40,6 +42,7 @@ class SlipBox:
             return self.dir
 
 
+# DatabaseManage
 class DatabaseManage(SlipBox):
     """Manage the SQLite3 database, which will store the paths to each note"""
 
@@ -106,6 +109,7 @@ class DatabaseManage(SlipBox):
         os.remove(TITLE)  # Remove the file
 
 
+# Zettel
 class Zettel(SlipBox):
     """
     Create notes, either permanent ones(modf_zettel), or temporary ones(modf_temp_note)
@@ -115,9 +119,8 @@ class Zettel(SlipBox):
         super().__init__(directory)
 
     def modf_temp_note(self) -> Path:
-        NOTE_PATH = helper_module.get_date_as_path(
-            self.dir_fleeting  # Get path as ^^ with the root being self.dir_fleeting
-        )
+        # Get path as date with the root being self.dir_fleeting
+        NOTE_PATH = helper_module.get_date_as_path(self.dir_fleeting)
 
         if not NOTE_PATH.is_file():  # If the file doesn't exists
             NOTE_PATH.touch()  # Create the file

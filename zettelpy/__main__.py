@@ -1,3 +1,4 @@
+# Imports
 import argparse
 import os
 from pathlib import Path
@@ -6,6 +7,7 @@ from sys import stdout
 from zettelpy import slip_box, helper_module as helper
 
 
+# CLI Arguments
 def cli() -> argparse.Namespace:
     """Parses the user arguments"""
     parser = argparse.ArgumentParser(
