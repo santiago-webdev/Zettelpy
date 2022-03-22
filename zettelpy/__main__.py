@@ -1,75 +1,78 @@
-# Imports
 import argparse
 import os
 from pathlib import Path
 from posixpath import realpath
 from sys import stdout
-from zettelpy import slip_box, helper_module as helper
+from zettelpy import slip_box, utils_module as utils  # Import helper functions
 
 
 # CLI Arguments
-def cli() -> argparse.Namespace:
+def cli_arguments() -> argparse.Namespace:
     """Parses the user arguments"""
     parser = argparse.ArgumentParser(
-        prog='zettelpy',
-        description='Personal Knowledge System based on Zettelkasten',
+        prog="zettelpy",
+        description="Personal Knowledge System based on Zettelkasten",
     )
     parser.add_argument(
-        'title',
-        nargs='?',
+        "title",
+        nargs="?",
         type=Path,
         default=None,
-        help='Provide path or id of the note',
+        help="Provide an ID or title to search or create a note",
     )
     parser.add_argument(
-        '-l',
-        '--last',
-        action='store_true',
-        help='Open the last permanent note that you have accessed',
+        "-l",
+        "--last",
+        action="store_true",
+        help="""Open the last permanent note that you have
+        accessed, if you provide a title it will be ignored""",
     )
     parser.add_argument(
-        '-p',
-        '--path',
-        action='store_true',
-        help='Prints the path to the note, it can also be used for command replacement',
+        "-p",
+        "--path",
+        action="store_true",
+        help="Prints the path to the note, it can be used for command replacement",
     )
     parser.add_argument(
-        '-d', '--delete', action='store_true', help='Delete the note by title'
+        "-d", "--delete", action="store_true", help="Delete the note by title/ID"
     )
+
     return parser.parse_args()
 
 
 def main():
-    # If the env var $ZETTELPY_DIR is not set, assign a default value to NOTES_DIR
-    if not (NOTES_DIR := os.getenv('ZETTELPY_DIR')):
-        NOTES_DIR = Path(os.getenv('HOME'), 'zettelpy')
-    user_args = cli()
+    # If the env var ZETTELPY_DIR is not set assign a default value to NOTES_DIR
+    if not (NOTES_DIR := os.getenv("ZETTELPY_DIR")):
+        NOTES_DIR: Path = Path(os.getenv("HOME"), ".zettelpy")
+        return NOTES_DIR
 
-    slip_box_spawn = slip_box.SlipBox(NOTES_DIR)  # Instantiate a SlipBox Object
-    slip_box_spawn.slipbox_init()  # Create base hierarchy of files
+    # Instantiate both Objects and create the directories and database necessaries
+    slip_box_spawn = slip_box.SlipBox(NOTES_DIR)
+    db_spawn = slip_box.DatabaseManage(NOTES_DIR)
+    slip_box_spawn.slipbox_init()
+    db_spawn.database_init()
 
-    db_spawn = slip_box.DatabaseManage(NOTES_DIR)  # Instantiate a DatabaseManage Object
-    db_spawn.database_init()  # Create the database
+    zettel_mode = utils.first_actions(cli_arguments().last, cli_arguments().title)
 
-    zettel_mode = helper.first_actions(user_args.last, user_args.title)
-
-    # If we pass the flag
-    if user_args.delete is True and user_args.title is not None:
+    # Check -d flag
+    if cli_arguments().delete is True and cli_arguments().title is None:
+        print("You haven't specified the note you want to delete")
+        return exit(1)
+    elif cli_arguments().delete is True and cli_arguments().title is not None:
         return db_spawn.delete_row_and_file(zettel_mode)
 
-    # If the argument/flag title(which in this case would be zettel_mode) and -p are
-    # present return a path through standard output
-    if user_args.path is True and user_args.last is True:
-        with open('last_note', 'r') as last_note:  # Read mode
-            return realpath(last_note.read().rstrip('\n'))
-    elif user_args.path is True and zettel_mode is not None:
+    # For title and -p flags return a path through stdout without editing the note
+    if cli_arguments().path is True and cli_arguments().last is True:
+        with open("last_note", "r") as last_note:
+            return realpath(last_note.read().rstrip("\n"))
+    elif cli_arguments().path is True and zettel_mode is not None:
         if not zettel_mode.is_file():  # But only if that file exists
-            return print('The file doesn\'t exists')
+            return print("The file doesn't exists")
         return stdout.write(str(realpath(zettel_mode)))
 
     if zettel_mode is None:
         # This modf_temp_note returns a path, and we open it with open_note
-        helper.open_note(slip_box.Zettel(NOTES_DIR).modf_temp_note())
+        utils.open_note(slip_box.Zettel(NOTES_DIR).modf_temp_note())
     else:
         # Query the database for a path first, return_path actually returns a tuple when
         # there's a value present or a NoneType, so if the walrus operator works we
@@ -78,7 +81,7 @@ def main():
             zettel_mode = db_can_return_path[0]
 
         # The same but for permanent notes
-        helper.open_note(slip_box.Zettel(NOTES_DIR).modf_zettel(Path(zettel_mode)))
+        utils.open_note(slip_box.Zettel(NOTES_DIR).modf_zettel(Path(zettel_mode)))
 
         if os.stat(zettel_mode).st_size == 0:  # Check the size of the file
             # If it's empty delete the file
@@ -89,5 +92,5 @@ def main():
             db_spawn.insert_note(Path(zettel_mode).stem, realpath(zettel_mode))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

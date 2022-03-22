@@ -21,8 +21,8 @@ deactivate
 echo -e "Modifying the launcher"
 path_to_repo=$(realpath .)
 path_to_venv=$path_to_repo/.zetenv/bin/activate
-cp needed/zet needed/zet_user
-sed -i "s|path_virt_env=|path_virt_env=$path_to_venv|" needed/zet_user >/dev/null
+cp zettelpy/templates/zet zettelpy/templates/zet_user
+sed -i "s|path_virt_env=|path_virt_env=$path_to_venv|" zettelpy/templates/zet_user >/dev/null
 
 echo -e "Copying launcher"
-cp needed/zet_user ~/.local/bin/zet
+cp zettelpy/templates/zet_user ~/.local/bin/zet
